@@ -1,12 +1,23 @@
 [
   {
+    "node_id": 0,
+    "date": "2024-03-9",
+    "country": "UKR",
+    "insight": "Now",
+    "event_description": "Now",
+    "concerns": [],
+    "caused_by": [],
+    "likelihood": 1,
+    "category": "Now"
+  },
+  {
     "node_id": 1,
     "date": "2025-03-15",
     "country": "USA",
     "insight": "US Suspends Military Aid to Ukraine",
     "event_description": "The United States announces the suspension of military aid and intelligence sharing with Ukraine, citing concerns over escalating tensions and the need for diplomatic solutions.",
     "concerns": ["UA", "RU", "EU"],
-    "caused_by": [],
+    "caused_by": [0],
     "likelihood": 0.7,
     "category": "Foreign policy"
   },
@@ -116,7 +127,7 @@
     "insight": "US President Criticizes Ukrainian Leadership",
     "event_description": "The US President publicly criticizes Ukraine's President, labeling him a 'dictator' and questioning the legitimacy of his leadership amid the ongoing conflict.",
     "concerns": ["UA", "USA"],
-    "caused_by": [],
+    "caused_by": [0],
     "likelihood": 0.6,
     "category": "Foreign policy"
   },
@@ -160,7 +171,7 @@
     "insight": "US President Questions Ukraine's Survival",
     "event_description": "President Trump publicly expresses doubts about Ukraine's ability to survive the ongoing conflict with Russia, even with US support, signaling a potential shift in US foreign policy.",
     "concerns": ["UA", "EU", "RU"],
-    "caused_by": [],
+    "caused_by": [0],
     "likelihood": 0.8,
     "category": "Foreign policy"
   },
