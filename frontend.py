@@ -129,7 +129,7 @@ def create_graph(data, show_percentages=True):
     for node in data:
         node_id = str(node["node_id"])  # Convert IDs to strings for compatibility
         label = node["insight"]
-        title = f"{node['date']}: {node['insight']}\n{node['event description']}"
+        title = f"{node['date']}: {node['insight']}\n{node['event_description']}"
         
         # Add node with attributes
         G.add_node(
@@ -275,7 +275,7 @@ def draw_graph(G, data):
             node_info[node_id] = {
                 "insight": item["insight"],
                 "date": item["date"],
-                "description": item["event description"],
+                "description": item["event_description"],
                 "country": item["country"],
                 "category": item["category"]
             }
@@ -651,7 +651,7 @@ def draw_graph(G, data):
 def main():
     # Set page config with custom icon and layout
     st.set_page_config(
-        page_title="Policy Maker AI", 
+        page_title="Policy maker AI", 
         page_icon="🔄",
         layout="wide",
         initial_sidebar_state="expanded"
@@ -662,13 +662,12 @@ def main():
     
     # Create a header with better formatting
     st.markdown("""
-    # 🔄 Policy Maker AI
+    # 🔄 Historical Event Causation Explorer
     """)
     
     # Add an introductory text
     st.markdown("""
-    This tool helps policay makers visualize complex relationships between historical events, 
-    showing how they influenced and caused each other over time.
+    AI monitoring tool for real time geopolitical analysis.
     """)
     
     # Create columns for stats and filters later
@@ -688,7 +687,8 @@ def main():
         )
         
         # Use a default file if no custom file is uploaded
-        json_file = "message.json"  # Default file path
+        # json_file = "message.json"  # Default file path
+        json_file = "final.json"  # Default file path
         if custom_file is not None:
             # Save uploaded file temporarily
             with open("temp_upload.json", "wb") as f:
