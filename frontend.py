@@ -662,7 +662,7 @@ def main():
     
     # Create a header with better formatting
     st.markdown("""
-    # 🔄 Historical Event Causation Explorer
+    # 🔄 Policy Maker AI
     """)
     
     # Add an introductory text
