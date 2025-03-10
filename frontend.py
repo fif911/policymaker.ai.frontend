@@ -142,42 +142,26 @@ def create_graph(data, show_percentages=True):
         )
     
     # Add edges based on causation relationships
+   # Add edges based on causation relationships
     for node in data:
         node_id = str(node["node_id"])  # Convert to string
         
         # Add edges for events that caused this node
         if "caused_by" in node:
-            caused_by = node["caused_by"]
-            
-            # Check if the format uses dicts or just IDs
-            if caused_by and isinstance(caused_by[0], dict):
-                # New format with likelihood info
-                for causer in caused_by:
-                    causer_node_id = str(causer.get("node_id"))  # Convert to string
-                    likelihood = causer.get("likelihood", 75)  # Default 75% if not specified
-                    
-                    if show_percentages:
-                        edge_label = f"{likelihood}%"
-                    else:
-                        edge_label = ""
-                    
-                    if causer_node_id in G:  # Make sure the node exists
-                        G.add_edge(causer_node_id, node_id, title=edge_label, 
-                                label=edge_label, length=200, width=2)
-            else:
-                # Old format with just IDs
-                for causer_node_id in caused_by:
-                    causer_node_id = str(causer_node_id)  # Convert to string
-                    likelihood = 75  # Default likelihood
-                    
-                    if show_percentages:
-                        edge_label = f"{likelihood}%"
-                    else:
-                        edge_label = ""
-                    
-                    if causer_node_id in G:  # Make sure the node exists
-                        G.add_edge(causer_node_id, node_id, title=edge_label, 
-                                label=edge_label, length=200, width=2)
+            for causer_node_id in node["caused_by"]:
+                causer_node_id = str(causer_node_id)  # Convert to string
+                
+                # Find the likelihood value for this connection
+                likelihood = node.get("likelihood", 0.75) * 100  # Default 75% if not specified
+                
+                if show_percentages:
+                    edge_label = f"{likelihood:.0f}%"
+                else:
+                    edge_label = ""
+                
+                if causer_node_id in G:  # Make sure the node exists
+                    G.add_edge(causer_node_id, node_id, title=edge_label, 
+                           label=edge_label, length=200, width=2)
     
     return G
 
