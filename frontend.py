@@ -651,7 +651,7 @@ def draw_graph(G, data):
 def main():
     # Set page config with custom icon and layout
     st.set_page_config(
-        page_title="Historical Event Causation Explorer", 
+        page_title="Policy Maker AI", 
         page_icon="🔄",
         layout="wide",
         initial_sidebar_state="expanded"
@@ -662,12 +662,12 @@ def main():
     
     # Create a header with better formatting
     st.markdown("""
-    # 🔄 Historical Event Causation Explorer
+    # 🔄 Policy Maker AI
     """)
     
     # Add an introductory text
     st.markdown("""
-    This tool helps you visualize complex relationships between historical events, 
+    This tool helps policay makers visualize complex relationships between historical events, 
     showing how they influenced and caused each other over time.
     """)
     
