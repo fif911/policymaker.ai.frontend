@@ -6,6 +6,7 @@ import os
 import html
 from datetime import datetime
 from web.modal_js import modal_js_template
+import pandas as pd
 
 # Set custom theme for Streamlit
 def set_custom_theme():
@@ -25,7 +26,7 @@ def load_data(json_file):
         return []
 
 def create_graph(data, show_percentages=True):
-    G = nx.DiGraph()  # Directed graph to show the flow of causation
+    graph = nx.DiGraph()  # Directed graph to show the flow of causation
     
     # Add nodes
     for node in data:
@@ -34,14 +35,18 @@ def create_graph(data, show_percentages=True):
         title = f"{node['date']}: {node['insight']}\n{node['event_description']}"
         
         # Add node with attributes
-        G.add_node(
+        graph.add_node(
             node_id, 
             title=title, 
-            size=20, 
+            size=20,
             label=label,
             country=node["country"],
             category=node["category"]
         )
+
+        if node["category"] == "Now":
+            date_now = node["date"]
+            print(date_now)
     
     # Add edges based on causation relationships
     for node in data:
@@ -50,38 +55,50 @@ def create_graph(data, show_percentages=True):
         # Add edges for events that caused this node
         if "caused_by" in node:
             for causer_node_id in node["caused_by"]:
+
                 causer_node_id = str(causer_node_id)  # Convert to string
-                
+
                 # Find the likelihood value for this connection
                 likelihood = node.get("likelihood", 0.75) * 100  # Default 75% if not specified
-                
+
                 if show_percentages:
                     edge_label = f"{likelihood:.0f}%"
                 else:
                     edge_label = ""
-                
-                if causer_node_id in G:  # Make sure the node exists
-                    G.add_edge(causer_node_id, node_id, title=edge_label, 
-                           label=edge_label, length=200, width=2)
-    
-    return G
 
-def draw_graph(G, data):
+                if causer_node_id in graph:  # Make sure the node exists
+                    # TODO: This breaks if we remove country from list
+                    causer_node = data[int(causer_node_id)]
+                    print(date_now)
+                    print(node["date"])
+                    print(node['event_description'])
+                    # edge_length = 4*(pd.to_datetime(node["date"]) - pd.to_datetime(date_now)).days
+                    edge_length = 4*(pd.to_datetime(node["date"]) - pd.to_datetime(causer_node["date"])).days
+                    edge_length = max(3, edge_length)
+                    print(f"Edge from {causer_node_id} to {node_id} - Likelihood: {likelihood}, Length: {edge_length}")
+                    print()
+                    graph.add_edge(causer_node_id, node_id, title=edge_label,
+                                   label=f"{edge_length:.0f}", length=edge_length, width=2)
+    return graph
+
+def draw_graph(graph, data):
     # Create Network object
     nt = Network("800px", "800px", notebook=False, directed=True)
     
     # Check if graph is empty
-    if len(G.nodes) == 0:
+    if len(graph.nodes) == 0:
         return "Error: Graph has no nodes to display"
     
     # Add graph data to Network
-    nt.from_nx(G)
+    nt.from_nx(graph)
+
+    nt.toggle_physics(True)
     
     # Create a color mapping based on categories
     categories = set()
-    for node_id in G.nodes():
-        if 'category' in G.nodes[node_id]:
-            categories.add(G.nodes[node_id]['category'])
+    for node_id in graph.nodes():
+        if 'category' in graph.nodes[node_id]:
+            categories.add(graph.nodes[node_id]['category'])
     
     categories = list(categories)
     color_map = {}
@@ -94,8 +111,8 @@ def draw_graph(G, data):
     # Update node colors based on category
     for node in nt.nodes:
         node_id = node['id']
-        if 'category' in G.nodes[node_id]:
-            node['color'] = color_map[G.nodes[node_id]['category']]
+        if 'category' in graph.nodes[node_id]:
+            node['color'] = color_map[graph.nodes[node_id]['category']]
     
     # Set options
     options = {
@@ -111,7 +128,7 @@ def draw_graph(G, data):
             "arrows": {
                 "to": {
                     "enabled": True,
-                    "scaleFactor": 1
+                    "scaleFactor": 1 # this changes arrow sizes
                 }
             },
             "smooth": True,
@@ -128,8 +145,6 @@ def draw_graph(G, data):
             "enabled": True,
             "hierarchicalRepulsion": {
                 "centralGravity": 0.0,
-                "springLength": 200,
-                "springConstant": 0.01,
                 "nodeDistance": 200
             },
             "minVelocity": 0.75,
@@ -327,7 +342,7 @@ def main():
         # Show dataset statistics in the new columns
         with col1:
             # Create graph from filtered data
-            G = create_graph(filtered_data, show_percentages)
+            graph = create_graph(filtered_data, show_percentages)
             
             # Stats in a more attractive format
             st.markdown("### Dataset Overview")
@@ -346,16 +361,16 @@ def main():
             st.subheader("Debug Information")
             debug_col1, debug_col2 = st.columns(2)
             with debug_col1:
-                st.info(f"Graph Nodes: {len(G.nodes)}")
+                st.info(f"Graph Nodes: {len(graph.nodes)}")
             with debug_col2:
-                st.info(f"Graph Edges: {len(G.edges)}")
+                st.info(f"Graph Edges: {len(graph.edges)}")
             
             # Show sample of the data
             with st.expander("Sample Data (First 2 Records)"):
                 st.write(filtered_data[:2])
         
         # Draw graph
-        html_content = draw_graph(G, filtered_data)
+        html_content = draw_graph(graph, filtered_data)
         
         if isinstance(html_content, str) and html_content.startswith("Error"):
             st.error(html_content)
