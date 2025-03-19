@@ -48,7 +48,6 @@ def add_sidebar(st):
     return show_percentages, json_file
 
 def load_data(json_file):
-    # ======== Environment Variables =========
     load_dotenv()
     assert (MONGODB_URI := os.getenv("MONGODB_URI"))
     RESEARCH_DIRECTORY: str = f"./researches/"
@@ -67,7 +66,6 @@ def load_data(json_file):
         return collection.find().to_list()
 
 def filter_data(st, json_file):
-
     # Add date filter
     st.markdown("### Filters")
 

@@ -1,8 +1,5 @@
 import networkx as nx
-from web.modal_js import modal_js_template
-import os
 import re
-import json
 from pyvis.network import Network
 from utils.graph_utils import whitespaces_to_line_breaks, options_setting, create_graph_structure_and_legend, get_final_html
 
