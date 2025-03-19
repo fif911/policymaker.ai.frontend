@@ -49,7 +49,7 @@ def create_graph(data, show_percentages=True):
             edge_label = f"{likelihood:.0f}%"
         else:
             edge_label = ""
-        edge_length = 200  # TODO: reformulate to work on date
+        edge_length = likelihood  # TODO: reformulate to work on date
         graph.add_edge(
             0,
             node_id,
