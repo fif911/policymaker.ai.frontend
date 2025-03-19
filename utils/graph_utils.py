@@ -1,4 +1,5 @@
 from string import whitespace
+import re
 import json
 from web.modal_js import modal_js_template
 import os
@@ -74,16 +75,36 @@ def create_graph_structure_and_legend(data, color_map, categories):
     node_info = {}
     for item in data:
         node_id = str(item["_id"])
+        with open(item["research_path"], "r") as file:
+            content = file.read()
+
+            content = re.sub("\u2019", "'", content)
+            # content = re.sub("\u201c", '"', content)
+            # content = re.sub("\u201d", '"', content)
+
+            content = re.sub(r'<think>.*?</think>\s*', '', content, flags=re.DOTALL)
+
+            content = re.sub(r'\s*?\n', '<br>', content)
+
+            content = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', content)
+            content = re.sub(r'\*(.*?)\*', r'<i>\1</i>', content)
+
+            content = re.sub(r'#####\s(.*?)<br>', r'<h5>\1</h5>', content)
+            content = re.sub(r'####\s(.*?)<br>', r'<h4>\1</h4>', content)
+            content = re.sub(r'###\s(.*?)<br>', r'<h3>\1</h3>', content)
+            content = re.sub(r'##\s(.*?)<br>', r'<h2>\1</h2>', content)
+            content = re.sub(r'#\s(.*?)<br>', r'<h1>\1</h1>', content)
+
+            content = re.sub(r'---<br>', r'<hr>', content)
+
+            # content = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2" target="_blank">\1</a>', content)
+
         node_info[node_id] = {
             "research_country": item["research_country"],
-            "date": item["date"],
+            "research_date": item["research_date"],
             "potential_event": item["potential_event"],
-            "due_date": item["due_date"],
-            "country": item["country"],
-            "actor": item["actor"],
             "category": item["category"],
-            "source": item["source"],
-            "reasoning": item["reasoning"],
+            "research": content,
         }
 
     # Also prepare a legend for categories

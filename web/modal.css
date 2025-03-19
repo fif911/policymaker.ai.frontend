@@ -27,9 +27,11 @@ body {
     border: none;
     width: 70%;
     max-width: 700px;
+    max-height: 80vh; /* Prevents it from being too tall */
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     animation: modalFadeIn 0.3s ease-out;
+    overflow-y: auto; /* Enables scrolling */
 }
 
 @keyframes modalFadeIn {

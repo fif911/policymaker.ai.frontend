@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {{
             const modalDate = document.getElementById('modal-date');
             const modalCountry = document.getElementById('modal-country');
             const modalCategory = document.getElementById('modal-category');
-            const modalDescription = document.getElementById('modal-research');
+            const modalResearch = document.getElementById('modal-research');
             const closeBtn = document.getElementsByClassName('close-btn')[0];
             
             // Close the modal when clicking the X
@@ -87,9 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {{
                         const data = nodeData[nodeId];
                         
                         if (data) {{
-                            modalTitle.textContent = data.insight;
-                            modalDate.textContent = data.date;
-                            modalCountry.textContent = data.country;
+                            modalTitle.textContent = data.potential_event;
+                            modalDate.textContent = data.research_date;
+                            modalCountry.textContent = data.research_country;
                             
                             // Set color for category based on legend
                             modalCategory.textContent = data.category;
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {{
                                 modalCategory.style.color = getContrastColor(categoryColor);
                             }}
                             
-                            modalDescription.textContent = data.research;
+                            modalResearch.innerHTML = data.research;
                             modal.style.display = 'block';
                         }}
                     }}
