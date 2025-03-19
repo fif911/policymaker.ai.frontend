@@ -100,8 +100,6 @@ def get_final_html(network, graph, color_map, legend_data, node_info, file_path=
         if 'category' in graph.nodes[node_id]:
             node['color'] = color_map[graph.nodes[node_id]['category']]
 
-            print(node['color'])
-
             # Check if file exists and has content
             if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
                 with open(file_path, 'r', encoding='utf-8') as file:

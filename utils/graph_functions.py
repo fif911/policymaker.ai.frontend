@@ -4,7 +4,7 @@ import os
 import re
 import json
 from pyvis.network import Network
-from graph_utils import whitespaces_to_line_breaks, options_setting, create_graph_structure_and_legend, get_final_html
+from utils.graph_utils import whitespaces_to_line_breaks, options_setting, create_graph_structure_and_legend, get_final_html
 
 def create_graph(data, show_percentages=True):
     graph = nx.DiGraph()  # Directed graph to show the flow of causation
