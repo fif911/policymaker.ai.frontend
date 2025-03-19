@@ -73,12 +73,11 @@ def create_graph(data, show_percentages=True):
 
         with open(node["research_path"], "r") as file:
             content = file.read()
-            likelihood = 50
-            # likelihood = int((
-            #     re
-            #     .search(r"### **likelihood**: (\d+)/10", content)
-            #     .group(1)
-            # )) * 10
+            likelihood = int((
+                re
+                .search(r"\*\*likelihood\*\*:\s(\d+)/10", content)
+                .group(1)
+            )) * 10
 
         
         if show_percentages:
