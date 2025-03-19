@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {{
             const modalDate = document.getElementById('modal-date');
             const modalCountry = document.getElementById('modal-country');
             const modalCategory = document.getElementById('modal-category');
-            const modalDescription = document.getElementById('modal-description');
+            const modalDescription = document.getElementById('modal-research');
             const closeBtn = document.getElementsByClassName('close-btn')[0];
             
             // Close the modal when clicking the X
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {{
                                 modalCategory.style.color = getContrastColor(categoryColor);
                             }}
                             
-                            modalDescription.textContent = data.description;
+                            modalDescription.textContent = data.research;
                             modal.style.display = 'block';
                         }}
                     }}
