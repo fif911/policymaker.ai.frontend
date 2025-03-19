@@ -1,3 +1,4 @@
+import re
 import streamlit as st
 import networkx as nx
 from pyvis.network import Network
@@ -7,6 +8,18 @@ import html
 from datetime import datetime
 from web.modal_js import modal_js_template
 import pandas as pd
+from pymongo import MongoClient
+from pymongo.collection import Collection
+from pymongo.database import Database
+from dotenv import load_dotenv
+
+
+# ======== Environment Variables =========
+load_dotenv()
+assert (MONGODB_URI := os.getenv("MONGODB_URI"))
+RESEARCH_DIRECTORY: str = f"./researches/"
+os.makedirs(RESEARCH_DIRECTORY, exist_ok=True)
+
 
 # Set custom theme for Streamlit
 def set_custom_theme():
@@ -17,22 +30,38 @@ def set_custom_theme():
         )
 
 def load_data(json_file):
-    try:
+    if json_file:
         with open(json_file, 'r') as file:
             data = json.load(file)
-            return data
-    except Exception as e:
-        st.error(f"Error loading JSON data: {str(e)}")
-        return []
+
+        return data
+    else:
+        client: MongoClient = MongoClient(MONGODB_URI)
+        db: Database = client.get_database("events")
+        collection: Collection = db.get_collection("events")
+
+        return collection.find().to_list()
+    
 
 def create_graph(data, show_percentages=True):
     graph = nx.DiGraph()  # Directed graph to show the flow of causation
+
+    # Add root node for "Now"
+    research_country = data[0]["research_country"]  # TODO: find a better way to get the country
+    graph.add_node(
+        0,
+        title="Now",
+        size=20,
+        label="Now",
+        country=research_country,
+        category="Now"
+    )
     
     # Add nodes
     for node in data:
-        node_id = str(node["node_id"])  # Convert IDs to strings for compatibility
-        label = node["insight"]
-        title = f"{node['date']}: {node['insight']}\n{node['event_description']}"
+        node_id = str(node["_id"])  # Convert IDs to strings for compatibility
+        label = node["potential_event"]
+        title = f"{node['due_date']}: {node['potential_event']}"  # TODO: Add research details
         
         # Add node with attributes
         graph.add_node(
@@ -40,45 +69,34 @@ def create_graph(data, show_percentages=True):
             title=title, 
             size=20,
             label=label,
-            country=node["country"],
+            country=node["research_country"],  # TODO: country vs research_country
             category=node["category"]
         )
 
-        if node["category"] == "Now":
-            date_now = node["date"]
-            print(date_now)
-    
-    # Add edges based on causation relationships
-    for node in data:
-        node_id = str(node["node_id"])  # Convert to string
+        with open(node["research_path"], "r") as file:
+            content = file.read()
+            likelihood = 50
+            # likelihood = int((
+            #     re
+            #     .search(r"### **likelihood**: (\d+)/10", content)
+            #     .group(1)
+            # )) * 10
+
         
-        # Add edges for events that caused this node
-        if "caused_by" in node:
-            for causer_node_id in node["caused_by"]:
+        if show_percentages:
+            edge_label = f"{likelihood:.0f}%"
+        else:
+            edge_label = ""
+        edge_length = 200  # TODO: reformulate to work on date
+        graph.add_edge(
+            0,
+            node_id,
+            title=edge_label,
+            label=edge_label,
+            length=edge_length,
+            width=2
+        )
 
-                causer_node_id = str(causer_node_id)  # Convert to string
-
-                # Find the likelihood value for this connection
-                likelihood = node.get("likelihood", 0.75) * 100  # Default 75% if not specified
-
-                if show_percentages:
-                    edge_label = f"{likelihood:.0f}%"
-                else:
-                    edge_label = ""
-
-                if causer_node_id in graph:  # Make sure the node exists
-                    # TODO: This breaks if we remove country from list
-                    causer_node = data[int(causer_node_id)]
-                    print(date_now)
-                    print(node["date"])
-                    print(node['event_description'])
-                    # edge_length = 4*(pd.to_datetime(node["date"]) - pd.to_datetime(date_now)).days
-                    edge_length = 4*(pd.to_datetime(node["date"]) - pd.to_datetime(causer_node["date"])).days
-                    edge_length = max(3, edge_length)
-                    print(f"Edge from {causer_node_id} to {node_id} - Likelihood: {likelihood}, Length: {edge_length}")
-                    print()
-                    graph.add_edge(causer_node_id, node_id, title=edge_label,
-                                   label=f"{edge_length:.0f}", length=edge_length, width=2)
     return graph
 
 def draw_graph(graph, data):
@@ -145,6 +163,8 @@ def draw_graph(graph, data):
             "enabled": True,
             "hierarchicalRepulsion": {
                 "centralGravity": 0.0,
+                "springLength": 200,
+                "springConstant": 0.01,
                 "nodeDistance": 200
             },
             "minVelocity": 0.75,
@@ -171,13 +191,17 @@ def draw_graph(graph, data):
         # Create a simplified data structure for the nodes
         node_info = {}
         for item in data:
-            node_id = str(item["node_id"])
+            node_id = str(item["_id"])
             node_info[node_id] = {
-                "insight": item["insight"],
+                "research_country": item["research_country"],
                 "date": item["date"],
-                "description": item["event_description"],
+                "potential_event": item["potential_event"],
+                "due_date": item["due_date"],
                 "country": item["country"],
-                "category": item["category"]
+                "actor": item["actor"],
+                "category": item["category"],
+                "source": item["source"],
+                "reasoning": item["reasoning"],
             }
         
         # Also prepare a legend for categories
@@ -261,12 +285,12 @@ def main():
         custom_file = st.file_uploader(
             "Upload a JSON file with event data",
             type=["json"], 
-            help="File should contain events with node_id, insight, date, country, and category fields"
+            help="File should contain events with node_id, insight, date, country, and category fields"  # TODO: Update fields
         )
         
         # Use a default file if no custom file is uploaded
         # json_file = "message.json"  # Default file path
-        json_file = "final.json"  # Default file path
+        json_file: None | str = None  # Default file path
         if custom_file is not None:
             # Save uploaded file temporarily
             with open("temp_upload.json", "wb") as f:
@@ -292,7 +316,7 @@ def main():
         
         if data:
             # Extract unique countries and categories for filtering
-            countries = sorted(list(set(item["country"] for item in data if "country" in item)))
+            countries = sorted(list(set(item["research_country"] for item in data if "research_country" in item)))
             categories = sorted(list(set(item["category"] for item in data if "category" in item)))
             
             # Country filter multiselect
@@ -315,7 +339,7 @@ def main():
             if selected_countries and selected_categories:
                 filtered_data = [
                     item for item in data 
-                    if item.get("country") in selected_countries and item.get("category") in selected_categories
+                    if item.get("research_country") in selected_countries and item.get("category") in selected_categories
                 ]
             else:
                 filtered_data = data
