@@ -162,7 +162,7 @@ def draw_graph(graph, data):
                 "centralGravity": 0.0,
                 "springLength": 200,
                 "springConstant": 0.01,
-                "nodeDistance": 200
+                "nodeDistance": 150
             },
             "minVelocity": 0.75,
             "solver": "hierarchicalRepulsion"
