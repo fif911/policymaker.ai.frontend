@@ -274,9 +274,7 @@ def main():
     
     # Sidebar with improved organization
     with st.sidebar:
-        st.image("https://via.placeholder.com/150x60?text=EventGraph", width=150)
-        
-        st.markdown("### Data Source")
+        st.markdown("### 📊 Data Source")
         
         # File uploader with better instructions
         custom_file = st.file_uploader(
