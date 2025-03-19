@@ -346,12 +346,6 @@ def main():
         else:
             filtered_data = []
         
-        # Advanced options collapsed section
-        with st.expander("🔧 Advanced Options"):
-            debug_mode = st.checkbox("Debug Mode", value=False)
-            st.slider("Node Size", 10, 50, 20, help="Adjust the size of event nodes in the graph")
-            st.slider("Edge Width", 1, 5, 2, help="Adjust the width of connection lines in the graph")
-        
         # Add info section at the bottom of sidebar
         st.markdown("---")
         st.markdown("""
@@ -380,30 +374,12 @@ def main():
             with metric_col3:
                 st.metric("Categories", len(selected_categories))
         
-        # If in debug mode, show more details
-        if debug_mode:
-            st.subheader("Debug Information")
-            debug_col1, debug_col2 = st.columns(2)
-            with debug_col1:
-                st.info(f"Graph Nodes: {len(graph.nodes)}")
-            with debug_col2:
-                st.info(f"Graph Edges: {len(graph.edges)}")
-            
-            # Show sample of the data
-            with st.expander("Sample Data (First 2 Records)"):
-                st.write(filtered_data[:2])
-        
         # Draw graph
         html_content = draw_graph(graph, filtered_data)
         
         if isinstance(html_content, str) and html_content.startswith("Error"):
             st.error(html_content)
         else:
-            # Show raw HTML in debug mode
-            if debug_mode and st.button("Show Raw HTML"):
-                with st.expander("Raw HTML Preview"):
-                    st.code(html_content[:1000] + "...", language="html")
-            
             # Display instructions for graph
             st.markdown("### Interactive Causation Graph")
             st.info("👆 Click on any node to view detailed information. Hover over lines to see causation likelihood.")
