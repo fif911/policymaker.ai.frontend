@@ -17,7 +17,6 @@ def add_sidebar(st):
     )
 
     # Use a default file if no custom file is uploaded
-    # json_file = "message.json"  # Default file path
     json_file: None | str = None  # Default file path
     if custom_file is not None:
         # Save uploaded file temporarily

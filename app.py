@@ -1,8 +1,8 @@
 import streamlit as st
 import os
 from datetime import datetime
-from graph_functions import create_graph, draw_graph
-from frontend_utils import add_sidebar, filter_data
+from utils.graph_functions import create_graph, draw_graph
+from utils.frontend_utils import add_sidebar, filter_data
 
 # Set custom theme for Streamlit
 def set_custom_theme():
