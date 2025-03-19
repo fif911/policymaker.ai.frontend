@@ -10,7 +10,7 @@ from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.database import Database
 from dotenv import load_dotenv
-
+from string import whitespace
 
 # ======== Environment Variables =========
 load_dotenv()
@@ -39,7 +39,16 @@ def load_data(json_file):
         collection: Collection = db.get_collection("events")
 
         return collection.find().to_list()
-    
+
+def whitespaces_to_line_breaks(string: str, each_num: int = 5) -> str:
+    indexes = [i for i, char in enumerate(string) if char in whitespace]
+
+    indexes = indexes[each_num-1::each_num]
+
+    for index in indexes:
+        string = string[:index] + "\n" + string[index + 1:]
+
+    return string
 
 def create_graph(data, show_percentages=True):
     graph = nx.DiGraph()  # Directed graph to show the flow of causation
@@ -59,6 +68,7 @@ def create_graph(data, show_percentages=True):
     for node in data:
         node_id = str(node["_id"])  # Convert IDs to strings for compatibility
         label = node["potential_event"]
+        label = whitespaces_to_line_breaks(label, each_num=5)
         title = f"{node['due_date']}: {node['potential_event']}"  # TODO: Add research details
         
         # Add node with attributes
