@@ -36,7 +36,6 @@ def create_graph(data, show_percentages=True):
         )
 
         research = b64decode(node["research"].encode()).decode()
-        print(research)
         likelihood = int((
             re
             .search(r"\*\*likelihood\*\*:\s(\d+)/10", research, re.IGNORECASE)
