@@ -50,8 +50,6 @@ def add_sidebar(st):
 def load_data(json_file):
     load_dotenv()
     assert (MONGODB_URI := os.getenv("MONGODB_URI"))
-    RESEARCH_DIRECTORY: str = f"./researches/"
-    os.makedirs(RESEARCH_DIRECTORY, exist_ok=True)
 
     if json_file:
         with open(json_file, 'r') as file:

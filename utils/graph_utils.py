@@ -1,4 +1,5 @@
 from string import whitespace
+from base64 import b64decode
 import re
 import json
 from web.modal_js import modal_js_template
@@ -75,29 +76,20 @@ def create_graph_structure_and_legend(data, color_map, categories):
     node_info = {}
     for item in data:
         node_id = str(item["_id"])
-        with open(item["research_path"], "r") as file:
-            content = file.read()
+        content = b64decode(item["research"].encode()).decode()
+        content = re.sub(r'<think>.*?</think>\s*', '', content, flags=re.DOTALL)
 
-            content = re.sub("\u2019", "'", content)
-            # content = re.sub("\u201c", '"', content)
-            # content = re.sub("\u201d", '"', content)
+        content = re.sub(r'\s*?\n', '<br>', content)
+        content = re.sub(r'---<br>', r'<hr>', content)
 
-            content = re.sub(r'<think>.*?</think>\s*', '', content, flags=re.DOTALL)
+        content = re.sub(r'#####\s(.*?)<br>', r'<h5>\1</h5>', content)
+        content = re.sub(r'####\s(.*?)<br>', r'<h4>\1</h4>', content)
+        content = re.sub(r'###\s(.*?)<br>', r'<h3>\1</h3>', content)
+        content = re.sub(r'##\s(.*?)<br>', r'<h2>\1</h2>', content)
+        content = re.sub(r'#\s(.*?)<br>', r'<h1>\1</h1>', content)
 
-            content = re.sub(r'\s*?\n', '<br>', content)
-
-            content = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', content)
-            content = re.sub(r'\*(.*?)\*', r'<i>\1</i>', content)
-
-            content = re.sub(r'#####\s(.*?)<br>', r'<h5>\1</h5>', content)
-            content = re.sub(r'####\s(.*?)<br>', r'<h4>\1</h4>', content)
-            content = re.sub(r'###\s(.*?)<br>', r'<h3>\1</h3>', content)
-            content = re.sub(r'##\s(.*?)<br>', r'<h2>\1</h2>', content)
-            content = re.sub(r'#\s(.*?)<br>', r'<h1>\1</h1>', content)
-
-            content = re.sub(r'---<br>', r'<hr>', content)
-
-            # content = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2" target="_blank">\1</a>', content)
+        # Replace "..." with “...”
+        content = re.sub(r'"(.*?)"', '\u201c\1\u201d', content)
 
         node_info[node_id] = {
             "research_country": item["research_country"],

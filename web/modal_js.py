@@ -1,16 +1,14 @@
-modal_js_template: str = """
+modal_js_template = """
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
-// Wait for network to be fully initialized
 document.addEventListener('DOMContentLoaded', function() {{
-    // Make sure we have access to the network object
     setTimeout(function() {{
         try {{
             // Node data
             const nodeData = {node_data_json};
-            
             // Legend data
             const legendData = {legend_json};
-            
+
             // Modal elements
             const modal = document.getElementById('node-modal');
             const modalTitle = document.getElementById('modal-title');
@@ -99,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {{
                                 modalCategory.style.color = getContrastColor(categoryColor);
                             }}
                             
-                            modalResearch.innerHTML = data.research;
+                            modalResearch.innerHTML = marked.parse(JSON.parse('"' + data.research + '"'));
                             modal.style.display = 'block';
                         }}
                     }}

@@ -1,4 +1,5 @@
 import networkx as nx
+from base64 import b64decode
 import re
 from pyvis.network import Network
 from utils.graph_utils import whitespaces_to_line_breaks, options_setting, create_graph_structure_and_legend, get_final_html
@@ -34,13 +35,13 @@ def create_graph(data, show_percentages=True):
             category=node["category"]
         )
 
-        with open(node["research_path"], "r") as file:
-            content = file.read()
-            likelihood = int((
-                re
-                .search(r"\*\*likelihood\*\*:\s(\d+)/10", content)
-                .group(1)
-            )) * 10
+        research = b64decode(node["research"].encode()).decode()
+        print(research)
+        likelihood = int((
+            re
+            .search(r"\*\*likelihood\*\*:\s(\d+)/10", research, re.IGNORECASE)
+            .group(1)
+        )) * 10
 
         if show_percentages:
             edge_label = f"{likelihood:.0f}%"
