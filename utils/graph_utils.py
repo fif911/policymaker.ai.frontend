@@ -18,14 +18,6 @@ def whitespaces_to_line_breaks(string: str, each_num: int = 5) -> str:
 def options_setting(network):
     # Set options
     options = {
-        "layout": {
-            "hierarchical": {
-                "enabled": True,
-                "direction": "LR",
-                "sortMethod": "directed",
-                "levelSeparation": 200
-            }
-        },
         "edges": {
             "arrows": {
                 "to": {
@@ -44,15 +36,7 @@ def options_setting(network):
             }
         },
         "physics": {
-            "enabled": True,
-            "hierarchicalRepulsion": {
-                "centralGravity": 0.0,
-                "springLength": 200,
-                "springConstant": 0.01,
-                "nodeDistance": 150
-            },
-            "minVelocity": 0.75,
-            "solver": "hierarchicalRepulsion"
+            "enabled": False,
         },
         "nodes": {
             "font": {

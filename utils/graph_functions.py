@@ -1,4 +1,5 @@
 import networkx as nx
+import random
 from base64 import b64decode
 import re
 from pyvis.network import Network
@@ -69,8 +70,6 @@ def draw_graph(graph, data):
     # Add graph data to Network
     nt.from_nx(graph)
 
-    nt.toggle_physics(True)
-
     # Create a color mapping based on categories
     categories = set()
     for node_id in graph.nodes():
@@ -90,6 +89,10 @@ def draw_graph(graph, data):
         node_id = node['id']
         if 'category' in graph.nodes[node_id]:
             node['color'] = color_map[graph.nodes[node_id]['category']]
+        
+        # Assign random positions
+        node['x'] = random.randint(-400, 400)
+        node['y'] = random.randint(-400, 400)
 
     options_setting(nt)
 
