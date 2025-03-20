@@ -1,4 +1,5 @@
 import networkx as nx
+import datetime
 import random
 from base64 import b64decode
 import re
@@ -16,7 +17,9 @@ def create_graph(data, show_percentages=True):
         size=20,
         label="Now",
         country=research_country,
-        category="Now"
+        category="Now",
+        research="Now",
+        research_date="Now"
     )
 
     # Add nodes
@@ -33,7 +36,9 @@ def create_graph(data, show_percentages=True):
             size=20,
             label=label,
             country=node["research_country"],  # TODO: country vs research_country
-            category=node["category"]
+            category=node["category"],
+            research=node["research"],
+            research_date=node["research_date"]
         )
 
         research = b64decode(node["research"].encode()).decode()
@@ -87,13 +92,27 @@ def draw_graph(graph, data):
     # Update node colors based on category
     for node in nt.nodes:
         node_id = node['id']
-        if 'category' in graph.nodes[node_id]:
-            node['color'] = color_map[graph.nodes[node_id]['category']]
-        
-        # Assign random positions
-        node['x'] = random.randint(-400, 400)
-        node['y'] = random.randint(-400, 400)
+        node['color'] = color_map[graph.nodes[node_id]['category']]
 
+        if graph.nodes[node_id]['research'] != "Now":
+            research = b64decode(graph.nodes[node_id]['research'].encode()).decode()
+            research_date = graph.nodes[node_id]['research_date']
+            due_date = (
+        	    re
+        	    .search(r"\*\*(Due Date|due_date)\*\*:\s(\d{4}-\d{2}-\d{2})", research, re.IGNORECASE)
+        	    .group(2)
+        	)
+            due_date = datetime.datetime.strptime(due_date, "%Y-%m-%d")
+            research_date = datetime.datetime.strptime(research_date, "%Y-%m-%d")
+
+            days = (due_date - research_date).days
+
+            node['x'] = days * 4
+            node['y'] = random.randint(-200, 200)
+        else:
+            node['x'] = 0
+            node['y'] = 0
+            continue
     options_setting(nt)
 
     try:
