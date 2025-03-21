@@ -1,3 +1,4 @@
+import numpy as np
 import networkx as nx
 import datetime
 import random
@@ -90,29 +91,38 @@ def draw_graph(graph, data):
         color_map[category] = colors[i % len(colors)]
 
     # Update node colors based on category
+    distance_between_nodes = 200
+    dist = (len(graph.nodes) - 2) * distance_between_nodes / 2
+    y_values: list = np.linspace(-dist, dist, len(graph.nodes)).tolist()
+
+    i: int = 0
+
     for node in nt.nodes:
         node_id = node['id']
         node['color'] = color_map[graph.nodes[node_id]['category']]
 
-        if graph.nodes[node_id]['research'] != "Now":
-            research = b64decode(graph.nodes[node_id]['research'].encode()).decode()
-            research_date = graph.nodes[node_id]['research_date']
-            due_date = (
-        	    re
-        	    .search(r"\*\*(Due Date|due_date)\*\*:\s(\d{4}-\d{2}-\d{2})", research, re.IGNORECASE)
-        	    .group(2)
-        	)
-            due_date = datetime.datetime.strptime(due_date, "%Y-%m-%d")
-            research_date = datetime.datetime.strptime(research_date, "%Y-%m-%d")
-
-            days = (due_date - research_date).days
-
-            node['x'] = days * 4
-            node['y'] = random.randint(-200, 200)
-        else:
+        if node_id == 0:
             node['x'] = 0
             node['y'] = 0
             continue
+
+        research = b64decode(graph.nodes[node_id]['research'].encode()).decode()
+        research_date = graph.nodes[node_id]['research_date']
+        print(research)
+        due_date = (
+                re
+                .search(r"\*\*(Due Date|due_date)\*\*:\s(\d{4}-\d{2}-\d{2})", research, re.IGNORECASE)
+                .group(2)
+            )
+        due_date = datetime.datetime.strptime(due_date, "%Y-%m-%d")
+        research_date = datetime.datetime.strptime(research_date, "%Y-%m-%d")
+
+        days = (due_date - research_date).days
+
+        node['x'] = int(np.sqrt(days)) * 100
+        # pick one from y_values and remove it
+        node['y'] = y_values[i]
+        i += 1
     options_setting(nt)
 
     try:

@@ -22,17 +22,21 @@ def options_setting(network):
             "arrows": {
                 "to": {
                     "enabled": True,
-                    "scaleFactor": 1  # this changes arrow sizes
+                    "scaleFactor": 1,
                 }
             },
-            "smooth": True,
+            "smooth": {
+                "enabled": True,
+                "type": "cubeBezier",
+                "roundness": 0.5,
+            },
             "font": {
                 "size": 14,
                 "color": "#343434",
-                "face": "Inter, sans-serif",  # Changed to modern font
-                "background": "rgba(255, 255, 255, 0.8)",  # Slightly more opaque
+                "face": "Inter, sans-serif",
+                "background": "rgba(255, 255, 255, 0.8)",
                 "strokeWidth": 0,
-                "align": "middle"
+                "align": "middle",
             }
         },
         "physics": {
@@ -41,14 +45,14 @@ def options_setting(network):
         "nodes": {
             "font": {
                 "size": 16,
-                "face": "Inter, sans-serif",  # Changed to modern font
-                "color": "#333333"
+                "face": "Inter, sans-serif",
+                "color": "#333333",
             },
             "shape": "box",
-            "margin": 12,  # Slightly larger margin
+            "margin": 12,
             "borderWidth": 1,
             "borderWidthSelected": 2,
-            "shadow": True  # Added shadow for better visibility
+            "shadow": True,
         }
     }
 
@@ -73,7 +77,7 @@ def create_graph_structure_and_legend(data, color_map, categories):
         content = re.sub(r'#\s(.*?)<br>', r'<h1>\1</h1>', content)
 
         # Replace "..." with “...”
-        content = re.sub(r'"(.*?)"', '\u201c\1\u201d', content)
+        content = re.sub(r'"(.*?)"', '\u201c\\1\u201d', content)
 
         node_info[node_id] = {
             "research_country": item["research_country"],
