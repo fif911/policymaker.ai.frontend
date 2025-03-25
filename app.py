@@ -14,7 +14,7 @@ def set_custom_theme():
 def main():
     # Set page config with custom icon and layout
     st.set_page_config(
-        page_title="Policy maker AI", 
+        page_title="Policymakers AI",
         page_icon="🔄",
         layout="wide",
         initial_sidebar_state="expanded"
@@ -25,7 +25,7 @@ def main():
     
     # Create a header with better formatting
     st.markdown("""
-    # 🔄 Policy Maker AI
+    # 🔄 Policymakers AI
     """)
     
     # Add an introductory text
