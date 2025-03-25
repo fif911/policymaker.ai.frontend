@@ -2,8 +2,7 @@ import json
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.database import Database
-from dotenv import load_dotenv
-import os
+import streamlit as st
 
 def add_sidebar(st):
     st.markdown("### 📊 Data Source")
@@ -48,8 +47,7 @@ def add_sidebar(st):
     return show_percentages, json_file
 
 def load_data(json_file):
-    load_dotenv()
-    assert (MONGODB_URI := os.getenv("MONGODB_URI"))
+    assert (MONGODB_URI := st.secrets["MONGODB_URI"]), "No MongoDB URI provided in secrets.toml."
 
     if json_file:
         with open(json_file, 'r') as file:
