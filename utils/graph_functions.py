@@ -45,7 +45,7 @@ def create_graph(data, show_percentages=True):
         research = b64decode(node["research"].encode()).decode()
         likelihood = int((
             re
-            .search(r"\*\*likelihood\*\*:\s(\d+)/10", research, re.IGNORECASE)
+            .search(r"\*\*likelihood\*\*:\s\**(\d+)/10", research, re.IGNORECASE)
             .group(1)
         )) * 10
 
@@ -108,12 +108,14 @@ def draw_graph(graph, data):
 
         research = b64decode(graph.nodes[node_id]['research'].encode()).decode()
         research_date = graph.nodes[node_id]['research_date']
-        print(research)
-        due_date = (
-                re
-                .search(r"\*\*(Due Date|due_date)\*\*:\s(\d{4}-\d{2}-\d{2})", research, re.IGNORECASE)
-                .group(2)
-            )
+        try:
+            due_date = (
+                    re
+                    .search(r"\*\*(Due Date|due_date)\*\*:\s(\d{4}-\d{2}-\d{2})", research, re.IGNORECASE)
+                    .group(2)
+                )
+        except:
+            print(research)
         due_date = datetime.datetime.strptime(due_date, "%Y-%m-%d")
         research_date = datetime.datetime.strptime(research_date, "%Y-%m-%d")
 
