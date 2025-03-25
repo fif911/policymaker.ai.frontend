@@ -39,7 +39,7 @@ def create_graph(data, show_percentages=True):
             country=node["research_country"],  # TODO: country vs research_country
             category=node["category"],
             research=node["research"],
-            research_date=node["research_date"]
+            research_date=node["research_date"] # TODO: this must be DUE DATE
         )
 
         research = b64decode(node["research"].encode()).decode()
