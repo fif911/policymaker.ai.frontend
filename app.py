@@ -38,9 +38,9 @@ def main():
     
     # Sidebar with improved organization
     with st.sidebar:
-        show_percentages, json_file = add_sidebar(st)
+        show_percentages = add_sidebar(st)
 
-    filtered_data, selected_countries, selected_categories = filter_data(st, json_file)
+    filtered_data, selected_countries, selected_categories = filter_data(st)
 
     # Main area
     if filtered_data:
