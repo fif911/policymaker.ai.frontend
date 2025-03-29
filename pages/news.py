@@ -3,6 +3,8 @@ import pandas as pd
 import base64
 from utils.frontend_utils import load_data
 
+image_size = [200, 200]
+
 def decode_base64(encoded_text):
     try:
         return base64.b64decode(encoded_text).decode("utf-8")
@@ -45,7 +47,7 @@ def filter_and_display_by_time_period(df: pd.DataFrame, period: str):
         st.markdown(f"### {period} horizon")
         st.markdown("---")
         # "View All" button aligned right
-        st.markdown("<div style='text-align: right;'><button>View All</button></div>", unsafe_allow_html=True)
+        st.markdown("<div style='text-align: right; margin-top: 0px'><button>View All</button></div>", unsafe_allow_html=True)
 
         # Display events in a grid
         col1, col2, col3, col4 = st.columns(4)
@@ -53,8 +55,19 @@ def filter_and_display_by_time_period(df: pd.DataFrame, period: str):
 
         for i, row in enumerate(filtered_df.itertuples()):
             with cols[i]:
-                st.markdown(f'<div style="width:200px; height:200px; border:1px solid #ddd; padding:10px; text-align:center;"></div>', unsafe_allow_html=True)
-                st.markdown(f'<div><b text-align:center>Potential event: {row.potential_event}</b><br text-align:center>Reasoning: {row.reasoning}</div>', unsafe_allow_html=True)
+                # Outer container to align both square and text blocks vertically
+                st.markdown(
+                    f'<div style="display:flex; flex-direction:column; justify-content:flex-start; align-items:center; height:700px;">' # TODO: Calculate heights based on text length
+                    f'<div style="width:{image_size[0]}px; height:{image_size[1]}px; padding:10px; display:flex; justify-content:center; align-items:center;">'
+                    f'<img src="https://picsum.photos/{image_size[0]}/{image_size[1]}" alt="Random Image" style="max-width:{image_size[0]}px; max-height:{image_size[1]}px; margin-top: 30px">'
+                    f'</div>'
+                    f'<div style="text-align:center; margin-top:20px;">'
+                    f'<b>Potential event:</b> {row.potential_event}<br>'
+                    f'<b>Reasoning:</b> {row.reasoning}'
+                    f'</div>'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
 
 # Page layout
 st.set_page_config(layout="wide")
