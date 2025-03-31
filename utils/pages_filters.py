@@ -37,13 +37,7 @@ def filter_and_display_by_time_period(df: pd.DataFrame, period: str):
     filtered_df = filtered_df.sort_values("likelihood", ascending=False)
 
     if len(filtered_df) != 0:
-
         horizon_headers_style(period, len(filtered_df))
-
-        st.markdown(
-            f'<a href="potential_events_horizon?period={period}" target="_self" style="color: white; background-color: #333; padding: 10px 20px; border: none; border-radius: 5px; text-decoration: none; cursor: pointer; float: right;">'
-            f'View All'
-            f'</a>', unsafe_allow_html=True)
 
         # Display events in a grid
         col1, col2, col3, col4 = st.columns(4, gap="medium")

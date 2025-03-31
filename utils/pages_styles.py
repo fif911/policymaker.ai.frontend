@@ -103,7 +103,13 @@ def blocks_style():
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 24px;
-        padding: 16px 0;
+        padding: 0 0 8px 0;
+    }
+
+    .horizon-header {
+        font-family: 'Inter', sans-serif;
+        color: #1a1a1a;
+        margin: 8px 0 8px 0;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -114,7 +120,17 @@ def horizon_headers_style(period: str, data_length: int):
         .horizon-header {
             font-family: 'Inter', sans-serif;
             color: #1a1a1a;
-            margin: 32px 0 24px 0;
+            margin: 8px 0 8px 0;
+        }
+        .horizon-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .horizon-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
         .horizon-header h2 {
             font-size: 24px;
@@ -132,22 +148,37 @@ def horizon_headers_style(period: str, data_length: int):
             border-radius: 16px;
             font-weight: 500;
         }
-        .horizon-divider {
-            height: 1px;
-            background: rgba(0, 0, 0, 0.1);
-            margin: 16px 0;
+        .view-all-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+        }
+        .view-all-button:hover {
+            background: #bbdefb;
+            transform: translateY(-1px);
         }
         </style>
     """, unsafe_allow_html=True)
 
     st.markdown(
         f'<div class="horizon-header">'
-        f'  <h2>'
-        f'    {period} horizon'
-        f'    <span class="event-count">{data_length} events</span>'
-        f'  </h2>'
-        f'</div>'
-        f'<div class="horizon-divider"></div>',
+        f'  <div class="horizon-header-content">'
+        f'    <div class="horizon-header-left">'
+        f'      <h2>'
+        f'        {period} horizon'
+        f'        <span class="event-count">{data_length} events</span>'
+        f'      </h2>'
+        f'    </div>'
+        f'    <a href="potential_events_horizon?period={period}" class="view-all-button" target="_self">View All</a>'
+        f'  </div>'
+        f'</div>',
         unsafe_allow_html=True
     )
 
