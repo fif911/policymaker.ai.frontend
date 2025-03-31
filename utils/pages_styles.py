@@ -44,7 +44,7 @@ def horizon_headers_style(period: str, data_length: int):
                 unsafe_allow_html=True)
     st.markdown('<hr style="margin-bottom: 10px;">', unsafe_allow_html=True)
 
-def button_style():
+def view_all_button_style():
     # Custom CSS for button styling
     st.markdown("""
        <style>
@@ -58,3 +58,18 @@ def button_style():
        }
        </style>
        """, unsafe_allow_html=True)
+
+def go_back_button_style():
+    # Custom CSS for button styling
+    st.markdown("""
+         <style>
+         .stButton > button {
+             color: white;
+             padding: 10px 20px;
+             border: none;
+             border-radius: 5px;
+             cursor: pointer;
+             float: left;
+         }
+         </style>
+         """, unsafe_allow_html=True)

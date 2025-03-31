@@ -39,6 +39,7 @@ def filter_and_display_by_time_period(df: pd.DataFrame, period: str):
 
         horizon_headers_style(period, len(filtered_df))
 
+        # TODO: Has to be a href
         if st.button("View All", key=period):
             # Store the data you want to pass in session state
             st.session_state.view_all_data = filtered_df
@@ -50,14 +51,12 @@ def filter_and_display_by_time_period(df: pd.DataFrame, period: str):
         col1, col2, col3, col4 = st.columns(4, gap="medium")
         cols = [col1, col2, col3, col4]
 
-        # TODO: Get uuids
-
         with st.container():
             st.markdown('<div class="cards-container">', unsafe_allow_html=True)
 
             for i, row in enumerate(filtered_df.head(4).itertuples()):
                 with cols[i]:
-                    add_one_event(row)
+                    add_one_event(row, period)
 
             st.markdown('</div>', unsafe_allow_html=True)
 
@@ -65,6 +64,9 @@ def layout_for_one_horizon_page(data: pd.DataFrame, period: str):
     data = filter_by_country_category(data)
 
     horizon_headers_style(period, len(data))
+
+    if st.button("Go Back", key=period):
+        st.switch_page("app.py")
 
     with st.container():
         st.markdown('<div class="cards-container">', unsafe_allow_html=True)
@@ -80,7 +82,7 @@ def layout_for_one_horizon_page(data: pd.DataFrame, period: str):
 
             # Use current column in the row
             with cols[col_index]:
-                add_one_event(row)
+                add_one_event(row, period)
 
             # Move to next column (0-3)
             col_index = (col_index + 1) % 4
@@ -89,3 +91,4 @@ def layout_for_one_horizon_page(data: pd.DataFrame, period: str):
                 st.markdown('<div style="height: 20px;"></div>', unsafe_allow_html=True)  # Add a gap
 
         st.markdown('</div>', unsafe_allow_html=True)
+
