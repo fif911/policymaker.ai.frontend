@@ -1,4 +1,3 @@
-import json
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.database import Database

@@ -1,0 +1,54 @@
+import streamlit as st
+import base64
+from pymongo import MongoClient
+from pymongo.collection import Collection
+from pymongo.database import Database
+import textwrap
+
+IMAGE_SIZE = [200, 200]
+SHOW_FIRST_SYMBOLS = 80
+
+def load_data():
+    assert (MONGODB_URI := st.secrets["MONGODB_URI"]), "No MongoDB URI provided in secrets.toml."
+
+    client: MongoClient = MongoClient(MONGODB_URI)
+    db: Database = client.get_database("events")
+    collection: Collection = db.get_collection("events")
+    return collection.find().to_list()
+
+def decode_base64(encoded_text):
+    try:
+        return base64.b64decode(encoded_text).decode("utf-8")
+    except Exception:
+        return "[Error decoding]"
+
+def convert_due_dates_into_dates(due_dates):
+    dates_coded = {"day": 1, "days": 1, "week": 1, "weeks": 7, "month": 30, "months": 30, "year": 365, "years": 365}
+
+    dates_scores = []
+    for date in due_dates:
+        date = date.split(" ")
+        date_in_days = int(date[0]) * dates_coded[date[1]]
+        dates_scores.append(date_in_days)
+    return dates_scores
+
+def add_one_event(row):
+    # Outer container to align both square and text blocks vertically
+    st.markdown(
+        f'<div class="event-card">'
+        f'  <div class="card-image">'
+        f'    <img src="https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg" '
+        f'         style="max-width:100%; max-height:100%; object-fit: contain;">'
+        f'  </div>'
+        f'  <div class="card-content">'
+        f'    <div>'
+        f'      <h3 style="margin: 0 0 8px 0; font-size: 18px;">{textwrap.shorten(row.potential_event, width=SHOW_FIRST_SYMBOLS, placeholder="...")}</h3>'
+        f'      <p style="margin: 5px 0; font-size: 16px;"><strong>Reasoning:</strong> {textwrap.shorten(row.reasoning, width=SHOW_FIRST_SYMBOLS, placeholder="...")}</p>'
+        f'    </div>'
+        f'    <div class="likelihood-section">'
+        f'      <p style="margin: 0; font-size: 16px;"><strong>Likelihood:</strong> {row.likelihood}</p>'
+        f'    </div>'
+        f'  </div>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
