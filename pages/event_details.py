@@ -1,5 +1,6 @@
 import streamlit as st
 import markdown
+import re
 
 from utils.mongo import get_mongo_connection
 from utils.pages_styles import go_back_button_style, event_details_style
@@ -32,17 +33,20 @@ if event_id:
 
     event = get_mongo_connection().find_one({"_id": ObjectId(event_id)})
     event["research"] = decode_base64(event["research"])
+    
+    # Remove content between <think> tags
+    event["research"] = re.sub(r'<think>.*?</think>', '', event["research"], flags=re.DOTALL)
 
-    # Render the event details with proper styling
+    # Render the event details with proper styling and tooltips
     st.markdown(
         f'<div class="event-details">'
         f'  <div class="event-header">'
         f'    <h1 class="event-title">{event["potential_event"]}</h1>'
         f'    <div class="event-meta">'
-        f'      <span class="meta-chip date-chip">{event["research_date"]}</span>'
-        f'      <span class="meta-chip country-chip">{event["research_country"]}</span>'
-        f'      <span class="meta-chip category-chip">{event["category"]}</span>'
-        f'      <span class="meta-chip likelihood-chip">Due: {event["due_date"]}</span>'
+        f'      <span class="meta-chip date-chip" data-tooltip="Date when this event was added to the database">{event["research_date"]}</span>'
+        f'      <span class="meta-chip country-chip" data-tooltip="Country or region this event relates to">{event["research_country"]}</span>'
+        f'      <span class="meta-chip category-chip" data-tooltip="Category of the potential event">{event["category"]}</span>'
+        f'      <span class="meta-chip likelihood-chip" data-tooltip="Expected timeline for this event">{event["due_date"]}</span>'
         f'    </div>'
         f'  </div>'
         f'  <div class="event-content">'

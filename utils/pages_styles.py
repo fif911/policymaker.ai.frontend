@@ -212,7 +212,7 @@ def event_details_style():
         }
         
         .event-title {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 600;
             color: #1a1a1a;
             margin-bottom: 16px;
@@ -232,6 +232,35 @@ def event_details_style():
             border-radius: 16px;
             font-size: 14px;
             color: #666;
+            position: relative;
+            cursor: help;
+        }
+        
+        .meta-chip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-bottom: 8px;
+        }
+        
+        .meta-chip:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.8);
+            margin-bottom: 2px;
         }
         
         .date-chip { background: #e3f2fd; color: #1976d2; }
@@ -241,37 +270,38 @@ def event_details_style():
         
         .event-content {
             color: #333;
-            line-height: 1.6;
-            font-size: 16px;
+            line-height: 1.7;
+            font-size: 17px;
         }
         
-        .event-content h1 { font-size: 24px; margin: 24px 0 16px; }
-        .event-content h2 { font-size: 20px; margin: 20px 0 12px; }
-        .event-content h3 { font-size: 18px; margin: 16px 0 8px; }
-        .event-content p { margin-bottom: 16px; }
-        .event-content ul, .event-content ol { margin: 16px 0; padding-left: 24px; }
-        .event-content li { margin-bottom: 8px; }
+        .event-content h1 { font-size: 28px; margin: 32px 0 20px; }
+        .event-content h2 { font-size: 24px; margin: 28px 0 16px; }
+        .event-content h3 { font-size: 20px; margin: 24px 0 12px; }
+        .event-content p { margin-bottom: 20px; }
+        .event-content ul, .event-content ol { margin: 20px 0; padding-left: 28px; }
+        .event-content li { margin-bottom: 12px; }
         .event-content a { color: #1976d2; text-decoration: none; }
         .event-content a:hover { text-decoration: underline; }
         .event-content blockquote {
             border-left: 4px solid #e0e0e0;
-            margin: 16px 0;
-            padding-left: 16px;
-            color: #666;
+            margin: 24px 0;
+            padding: 0 0 0 24px;
+            color: #444;
+            font-size: 18px;
         }
         .event-content code {
             background: #f5f5f5;
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 4px;
             font-family: monospace;
-            font-size: 14px;
+            font-size: 15px;
         }
         .event-content pre {
             background: #f5f5f5;
-            padding: 16px;
+            padding: 20px;
             border-radius: 8px;
             overflow-x: auto;
-            margin: 16px 0;
+            margin: 24px 0;
         }
         </style>
     """, unsafe_allow_html=True)
