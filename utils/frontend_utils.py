@@ -33,14 +33,15 @@ def load_data():
     client: MongoClient = MongoClient(MONGODB_URI)
     db: Database = client.get_database("events")
     collection: Collection = db.get_collection("events")
-    return collection.find().to_list()
+    return collection
 
 def filter_data(st):
     # Add date filter
     st.markdown("### Filters")
 
     # Load data for filtering options
-    data = load_data()
+    collection = load_data()
+    data = collection.find().to_list()
 
     if data:
         # Extract unique countries and categories for filtering

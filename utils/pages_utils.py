@@ -25,9 +25,8 @@ def convert_due_dates_into_dates(due_dates):
     return dates_scores
 
 def add_one_event(row, period):
-
     st.markdown(
-        f'<a href="event_details?event_id={row._1}&period={period}" style="text-decoration: none;">'
+        f'<a href="event_details?event_id={row._1}&period={period}" target="_self" style="color: white; text-decoration: none;">'
         f'  <div class="event-card">'
         f'      <div class="card-image">'
         f'      <img src="https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=" '

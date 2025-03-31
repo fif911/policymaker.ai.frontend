@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+from random import choices
 from utils.pages_utils import add_one_event
 from utils.pages_styles import horizon_headers_style
 
@@ -39,13 +40,10 @@ def filter_and_display_by_time_period(df: pd.DataFrame, period: str):
 
         horizon_headers_style(period, len(filtered_df))
 
-        # TODO: Has to be a href
-        if st.button("View All", key=period):
-            # Store the data you want to pass in session state
-            st.session_state.view_all_data = filtered_df
-            st.session_state.period = period
-            # Switch to the page that will display all data
-            st.switch_page("pages/potential_events_horizon.py")
+        st.markdown(
+            f'<a href="potential_events_horizon?period={period}" target="_self" style="color: white; background-color: #333; padding: 10px 20px; border: none; border-radius: 5px; text-decoration: none; cursor: pointer; float: right;">'
+            f'View All'
+            f'</a>', unsafe_allow_html=True)
 
         # Display events in a grid
         col1, col2, col3, col4 = st.columns(4, gap="medium")
@@ -63,10 +61,16 @@ def filter_and_display_by_time_period(df: pd.DataFrame, period: str):
 def layout_for_one_horizon_page(data: pd.DataFrame, period: str):
     data = filter_by_country_category(data)
 
+    data["likelihood"] = choices(range(1, 10), k=len(data))
+
+    data.sort_values("likelihood", ascending=False, inplace=True)
+
     horizon_headers_style(period, len(data))
 
-    if st.button("Go Back", key=period):
-        st.switch_page("app.py")
+    st.markdown(
+        f'<a href="/" target="_self" style="color: white; background-color: #333; padding: 5px; border-radius: 5px; text-decoration: none;">'
+        f"Go to main page"
+        f'</a>', unsafe_allow_html=True)
 
     with st.container():
         st.markdown('<div class="cards-container">', unsafe_allow_html=True)

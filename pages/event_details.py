@@ -1,5 +1,8 @@
 import streamlit as st
 from utils.pages_styles import go_back_button_style
+from bson import ObjectId
+from app import collection
+from utils.pages_utils import decode_base64
 
 # Page layout and styles
 st.set_page_config(layout="wide", page_title="Policymakers AI Main Page",)
@@ -12,15 +15,22 @@ period = query_params.get("period", None)
 go_back_button_style()
 
 if event_id:
-    # Fetch event details based on event_id
-    st.write(f"Displaying details for event ID: {event_id}")
-    if st.button("Go to main", key=f"{event_id}_main"):
-        st.switch_page("app.py")
+    st.markdown(
+        f'<a href="/" target="_self" style="color: white; background-color: #333; padding: 5px; border-radius: 5px; text-decoration: none;">'
+        f"Go to main page"
+        f'</a>', unsafe_allow_html=True)
 
-    # TODO: Has to be a href
-    if st.button(f"Go to view all for {period} horizon", key=f"{event_id}_{period}"):
-        st.switch_page(f"potential_events_horizon.py?period={period}")
+    st.markdown(
+        f'<a href="potential_events_horizon?period={period}" target="_self" style="color: white; background-color: #333; padding: 5px; border-radius: 5px; text-decoration: none;">'
+        f"Go to view all for {period} horizon"
+        f'</a>', unsafe_allow_html=True)
 
-    # TODO: Query mongo
+    event = collection.find_one({"_id": ObjectId(event_id)})
+
+    event["research"] = decode_base64(event["research"])
+
+    # TODO: Parse
+    st.write(event)
+
 else:
     st.write("You did not pass a query parameter event_id. Please make sure you pass it.")

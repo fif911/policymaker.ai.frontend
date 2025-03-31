@@ -1,17 +1,24 @@
 import streamlit as st
+import pandas as pd
 from utils.pages_filters import layout_for_one_horizon_page
 from utils.pages_styles import blocks_style, go_back_button_style
+from app import collection
+
+query_params = st.query_params
+period = query_params.get('period', None)
 
 # Check if the data exists in session state
-if 'view_all_data' in st.session_state:
+if period:
     # Page layout
-    st.set_page_config(layout="wide", page_title=f"Policymakers AI, all events for {st.session_state.period} horizon", )
-    layout_for_one_horizon_page(st.session_state.view_all_data, st.session_state.period)
+    st.set_page_config(layout="wide", page_title=f"Policymakers AI, all events for {period} horizon", )
+
+    events_for_period = collection.find({"due_date": period})
+    data_for_period = pd.DataFrame(events_for_period.to_list())
+
+    layout_for_one_horizon_page(data_for_period, period)
     blocks_style()
     go_back_button_style()
-    # Optionally, clear the data from session state after using it
-    # del st.session_state.view_all_data
 
 else:
-    # TODO: Query mongo
-    st.write("No data to display. Please go back and click 'View All'.")
+    st.write("You did not pass a query parameter period. Please make sure you pass it.")
+

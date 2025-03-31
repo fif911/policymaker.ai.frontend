@@ -1,7 +1,6 @@
 import numpy as np
 import networkx as nx
 import datetime
-import random
 from base64 import b64decode
 import re
 from pyvis.network import Network
