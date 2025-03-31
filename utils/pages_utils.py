@@ -3,7 +3,8 @@ import base64
 import textwrap
 
 IMAGE_SIZE = [200, 200]
-SHOW_FIRST_SYMBOLS = 80
+TITLE_SYMBOLS = 100
+REASONING_SYMBOLS = 120
 
 def decode_base64(encoded_text):
     try:
@@ -31,8 +32,8 @@ def add_one_event(row, period):
         f'      </div>'
         f'      <div class="card-content">'
         f'          <div>'
-        f'              <h3 class="event-title">{textwrap.shorten(row.potential_event, width=SHOW_FIRST_SYMBOLS, placeholder="...")}</h3>'
-        f'              <p class="event-reasoning">{textwrap.shorten(row.reasoning, width=SHOW_FIRST_SYMBOLS, placeholder="...")}</p>'
+        f'              <h3 class="event-title">{textwrap.shorten(row.potential_event, width=TITLE_SYMBOLS, placeholder="...")}</h3>'
+        f'              <p class="event-reasoning">{textwrap.shorten(row.reasoning, width=REASONING_SYMBOLS, placeholder="...")}</p>'
         f'          </div>'
         f'          <div class="event-meta">'
         f'              <span class="meta-chip likelihood-chip">Likelihood: {row.likelihood}</span>'
