@@ -3,13 +3,25 @@ import pandas as pd
 import base64
 from utils.frontend_utils import load_data
 
-image_size = [200, 200]
+IMAGE_SIZE = [200, 200]
+SHOW_FIRST_SYMBOLS = 80
 
 def decode_base64(encoded_text):
     try:
         return base64.b64decode(encoded_text).decode("utf-8")
     except Exception:
         return "[Error decoding]"
+
+def convert_due_dates_into_dates(due_dates):
+    dates_coded = {"day": 1, "days": 1, "week": 1, "weeks": 7, "month": 30, "months": 30, "year": 365, "years": 365}
+
+    dates_scores = []
+    for date in due_dates:
+        date = date.split(" ")
+        date_in_days = int(date[0]) * dates_coded[date[1]]
+        print(date_in_days)
+        dates_scores.append(date_in_days)
+    return dates_scores
 
 def filter_by_country_category(df: pd.DataFrame):
     countries_available = df["research_country"].unique()
@@ -32,15 +44,17 @@ def filter_by_country_category(df: pd.DataFrame):
             if item.get("research_country") in country_filter and item.get("category") in category_filter
         ]
 
-        filtered_data = pd.DataFrame(filtered_data)
+        filtered_df = pd.DataFrame(filtered_data)
 
-        return filtered_data
+        return filtered_df
     else:
         return df
 
 
 def filter_and_display_by_time_period(df: pd.DataFrame, period: str):
-    filtered_df = df[df["due_date"] == period].head(4)
+    filtered_df = df[df["due_date"] == period]
+
+    # filtered_df = filtered_df.sort_values("likelihood")
 
     if len(filtered_df) != 0:
 
@@ -53,17 +67,18 @@ def filter_and_display_by_time_period(df: pd.DataFrame, period: str):
         col1, col2, col3, col4 = st.columns(4)
         cols = [col1, col2, col3, col4]
 
-        for i, row in enumerate(filtered_df.itertuples()):
+        for i, row in enumerate(filtered_df.head(4).itertuples()):
             with cols[i]:
                 # Outer container to align both square and text blocks vertically
                 st.markdown(
-                    f'<div style="display:flex; flex-direction:column; justify-content:flex-start; align-items:center; height:700px;">' # TODO: Calculate heights based on text length
-                    f'<div style="width:{image_size[0]}px; height:{image_size[1]}px; padding:10px; display:flex; justify-content:center; align-items:center;">'
-                    f'<img src="https://picsum.photos/{image_size[0]}/{image_size[1]}" alt="Random Image" style="max-width:{image_size[0]}px; max-height:{image_size[1]}px; margin-top: 30px">'
+                    f'<div style="display:flex; flex-direction:column; justify-content:flex-start; align-items:center; height:400px;">' # TODO: Calculate heights based on text length
+                    f'<div style="width:{IMAGE_SIZE[0]}px; height:{IMAGE_SIZE[1]}px; padding:10px; display:flex; justify-content:center; align-items:center;">'
+                    f'<img src="https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=" alt="Random Image" style="max-width:{IMAGE_SIZE[0]}px; max-height:{IMAGE_SIZE[1]}px; margin-top: 30px">'
                     f'</div>'
                     f'<div style="text-align:center; margin-top:20px;">'
-                    f'<b>Potential event:</b> {row.potential_event}<br>'
-                    f'<b>Reasoning:</b> {row.reasoning}'
+                    f'<b>Potential event:</b> {row.potential_event[:SHOW_FIRST_SYMBOLS]}<br>'
+                    f'<b>Reasoning:</b> {row.reasoning[:SHOW_FIRST_SYMBOLS]}'
+                    # f'<b>Likelihood:</b> {row.likelihood}'
                     f'</div>'
                     f'</div>',
                     unsafe_allow_html=True
@@ -76,9 +91,11 @@ loaded_data = load_data()
 
 df = pd.DataFrame(loaded_data)
 
-filtered_data = filter_by_country_category(df)
+df["due_date_score"] = convert_due_dates_into_dates(df["due_date"])
 
-# TODO: Think of a rule to sort days, weeks, months, years in that order.
+df.sort_values("due_date_score", ascending=True, inplace=True)
+
+filtered_data = filter_by_country_category(df)
 
 for period in df["due_date"].unique():
     filter_and_display_by_time_period(filtered_data, period)
