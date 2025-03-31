@@ -4,6 +4,7 @@ from random import choices
 from utils.pages_utils import add_one_event
 from utils.pages_styles import horizon_headers_style
 
+
 def filter_by_country_category(df: pd.DataFrame):
     countries_available = df["research_country"].unique()
     categories_available = df["category"].unique()
@@ -31,6 +32,7 @@ def filter_by_country_category(df: pd.DataFrame):
     else:
         return df
 
+
 def filter_and_display_by_time_period(df: pd.DataFrame, period: str):
     filtered_df = df[df["due_date"] == period]
 
@@ -52,6 +54,7 @@ def filter_and_display_by_time_period(df: pd.DataFrame, period: str):
 
             st.markdown('</div>', unsafe_allow_html=True)
 
+
 def layout_for_one_horizon_page(data: pd.DataFrame, period: str):
     data = filter_by_country_category(data)
 
@@ -59,12 +62,7 @@ def layout_for_one_horizon_page(data: pd.DataFrame, period: str):
 
     data.sort_values("likelihood", ascending=False, inplace=True)
 
-    horizon_headers_style(period, len(data))
-
-    st.markdown(
-        f'<a href="/" target="_self" style="color: white; background-color: #333; padding: 5px; border-radius: 5px; text-decoration: none;">'
-        f"Go to main page"
-        f'</a>', unsafe_allow_html=True)
+    horizon_headers_style(period, len(data), show_view_all=False)
 
     with st.container():
         st.markdown('<div class="cards-container">', unsafe_allow_html=True)
@@ -75,7 +73,7 @@ def layout_for_one_horizon_page(data: pd.DataFrame, period: str):
         for i, row in enumerate(data.itertuples()):
             # Create new row every 4th item
             if i % 4 == 0:
-                cols = st.columns(4, gap = "medium")  # Creates new row with 4 columns
+                cols = st.columns(4, gap="medium")  # Creates new row with 4 columns
                 col_index = 0  # Reset column counter for new row
 
             # Use current column in the row
@@ -89,4 +87,3 @@ def layout_for_one_horizon_page(data: pd.DataFrame, period: str):
                 st.markdown('<div style="height: 20px;"></div>', unsafe_allow_html=True)  # Add a gap
 
         st.markdown('</div>', unsafe_allow_html=True)
-

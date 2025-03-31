@@ -114,7 +114,7 @@ def blocks_style():
     </style>
     """, unsafe_allow_html=True)
 
-def horizon_headers_style(period: str, data_length: int):
+def horizon_headers_style(period: str, data_length: int, show_view_all: bool = True):
     st.markdown("""
         <style>
         .horizon-header {
@@ -166,7 +166,7 @@ def horizon_headers_style(period: str, data_length: int):
         }
         </style>
     """, unsafe_allow_html=True)
-
+    view_all_button = f'<a href="potential_events_horizon?period={period}" class="view-all-button" target="_self">View All</a>' if show_view_all else ""
     st.markdown(
         f'<div class="horizon-header">'
         f'  <div class="horizon-header-content">'
@@ -176,7 +176,7 @@ def horizon_headers_style(period: str, data_length: int):
         f'        <span class="event-count">{data_length} events</span>'
         f'      </h2>'
         f'    </div>'
-        f'    <a href="potential_events_horizon?period={period}" class="view-all-button" target="_self">View All</a>'
+        f'   {view_all_button}'
         f'  </div>'
         f'</div>',
         unsafe_allow_html=True
