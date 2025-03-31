@@ -64,6 +64,9 @@ def layout_for_one_horizon_page(data: pd.DataFrame, period: str):
 
     horizon_headers_style(period, len(data), show_view_all=False)
 
+    # Get the number of columns based on window width
+    num_columns = 4
+
     with st.container():
         st.markdown('<div class="cards-container">', unsafe_allow_html=True)
         # Initialize column counter and cycle through column positions
@@ -71,19 +74,20 @@ def layout_for_one_horizon_page(data: pd.DataFrame, period: str):
         cols = []
 
         for i, row in enumerate(data.itertuples()):
-            # Create new row every 4th item
-            if i % 4 == 0:
-                cols = st.columns(4, gap="medium")  # Creates new row with 4 columns
-                col_index = 0  # Reset column counter for new row
+            # Create new row when needed
+            if i % num_columns == 0:
+                cols = st.columns(num_columns, gap="medium")
+                col_index = 0
 
             # Use current column in the row
             with cols[col_index]:
                 add_one_event(row, period)
 
-            # Move to next column (0-3)
-            col_index = (col_index + 1) % 4
+            # Move to next column
+            col_index = (col_index + 1) % num_columns
 
+            # Add gap between rows
             if col_index == 0 and i != len(data) - 1:
-                st.markdown('<div style="height: 20px;"></div>', unsafe_allow_html=True)  # Add a gap
+                st.markdown('<div style="height: 20px;"></div>', unsafe_allow_html=True)
 
         st.markdown('</div>', unsafe_allow_html=True)

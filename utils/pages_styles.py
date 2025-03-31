@@ -5,6 +5,29 @@ def blocks_style():
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
     
+    /* Fix Streamlit column responsiveness */
+    [data-testid="column"] {
+        width: calc(25% - 1rem) !important;
+        flex: 1 1 calc(25% - 1rem) !important;
+        min-width: calc(25% - 1rem) !important;
+    }
+
+    @media (max-width: 900px) {
+        [data-testid="column"] {
+            width: calc(50% - 1rem) !important;
+            flex: 1 1 calc(50% - 1rem) !important;
+            min-width: calc(50% - 1rem) !important;
+        }
+    }
+
+    @media (max-width: 600px) {
+        [data-testid="column"] {
+            width: 100% !important;
+            flex: 1 1 100% !important;
+            min-width: 100% !important;
+        }
+    }
+    
     .event-card {
         display: flex;
         flex-direction: column;
@@ -18,6 +41,7 @@ def blocks_style():
         transition: all 0.2s ease-in-out;
         font-family: 'Inter', sans-serif;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        width: 100%;
     }
 
     .event-card:hover {
@@ -101,15 +125,42 @@ def blocks_style():
 
     .cards-container {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 24px;
         padding: 0 0 8px 0;
+        width: 100%;
+    }
+
+    @media screen and (max-width: 900px) {
+        .cards-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .event-card {
+            min-height: 350px;
+        }
+    }
+
+    @media screen and (max-width: 600px) {
+        .cards-container {
+            grid-template-columns: 1fr;
+        }
+        .event-card {
+            min-height: 320px;
+        }
+        .card-image {
+            height: 140px;
+        }
     }
 
     .horizon-header {
         font-family: 'Inter', sans-serif;
         color: #1a1a1a;
         margin: 8px 0 8px 0;
+    }
+
+    /* Fix stMarkdown width */
+    .element-container, .stMarkdown {
+        width: 100% !important;
     }
     </style>
     """, unsafe_allow_html=True)
