@@ -37,7 +37,7 @@ def add_one_event(row):
     st.markdown(
         f'<div class="event-card">'
         f'  <div class="card-image">'
-        f'    <img src="https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg" '
+        f'    <img src="https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=" '
         f'         style="max-width:100%; max-height:100%; object-fit: contain;">'
         f'  </div>'
         f'  <div class="card-content">'

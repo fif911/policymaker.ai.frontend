@@ -62,9 +62,6 @@ def filter_and_display_by_time_period(df: pd.DataFrame, period: str):
             st.markdown('</div>', unsafe_allow_html=True)
 
 def layout_for_one_horizon_page(data: pd.DataFrame, period: str):
-    # Page layout
-    st.set_page_config(layout="wide", page_title=f"Policymakers AI, all events for {period} horizon",)
-
     data = filter_by_country_category(data)
 
     horizon_headers_style(period, len(data))
@@ -87,5 +84,8 @@ def layout_for_one_horizon_page(data: pd.DataFrame, period: str):
 
             # Move to next column (0-3)
             col_index = (col_index + 1) % 4
+
+            if col_index == 0 and i != len(data) - 1:
+                st.markdown('<div style="height: 20px;"></div>', unsafe_allow_html=True)  # Add a gap
 
         st.markdown('</div>', unsafe_allow_html=True)
