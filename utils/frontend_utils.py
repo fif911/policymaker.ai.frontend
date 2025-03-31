@@ -3,6 +3,7 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 import streamlit as st
 
+
 def add_sidebar(st):
     # Use a default file if no custom file is uploaded
 
@@ -15,7 +16,6 @@ def add_sidebar(st):
         help="Display the probability percentage on each causal relationship"
     )
 
-
     # Add info section at the bottom of sidebar
     st.markdown("---")
     st.markdown("""
@@ -27,21 +27,24 @@ def add_sidebar(st):
 
     return show_percentages
 
+
+@st.cache_data
 def load_data():
     assert (MONGODB_URI := st.secrets["MONGODB_URI"]), "No MongoDB URI provided in secrets.toml."
 
     client: MongoClient = MongoClient(MONGODB_URI)
     db: Database = client.get_database("events")
     collection: Collection = db.get_collection("events")
-    return collection
+    data = collection.find().to_list()
+    return data
+
 
 def filter_data(st):
     # Add date filter
     st.markdown("### Filters")
 
     # Load data for filtering options
-    collection = load_data()
-    data = collection.find().to_list()
+    data = load_data()
 
     if data:
         # Extract unique countries and categories for filtering

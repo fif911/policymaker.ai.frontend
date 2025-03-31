@@ -10,8 +10,7 @@ from utils.pages_filters import filter_by_country_category, filter_and_display_b
 st.set_page_config(layout="wide", page_title="Policymakers AI Main Page",)
 blocks_style()
 
-collection = load_data()
-loaded_data = collection.find().to_list()
+loaded_data = load_data()
 
 # st.write(loaded_data)
 
