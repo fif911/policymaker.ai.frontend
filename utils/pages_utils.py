@@ -1,8 +1,5 @@
 import streamlit as st
 import base64
-from pymongo import MongoClient
-from pymongo.collection import Collection
-from pymongo.database import Database
 import textwrap
 
 IMAGE_SIZE = [200, 200]

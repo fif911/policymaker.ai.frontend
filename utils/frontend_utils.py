@@ -1,6 +1,3 @@
-from pymongo import MongoClient
-from pymongo.collection import Collection
-from pymongo.database import Database
 import streamlit as st
 
 from utils.mongo import get_mongo_connection
