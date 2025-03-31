@@ -7,7 +7,11 @@ from utils.pages_utils import convert_due_dates_into_dates
 from utils.pages_filters import filter_by_country_category, filter_and_display_by_time_period
 
 # Page layout and styles
-st.set_page_config(layout="wide", page_title="Policymakers AI Main Page",)
+st.set_page_config(
+    layout="wide", 
+    page_title="Policymakers AI Main Page",
+    initial_sidebar_state="collapsed"
+)
 blocks_style()
 
 loaded_data = load_data()

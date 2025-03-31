@@ -8,7 +8,7 @@ from bson import ObjectId
 from utils.pages_utils import decode_base64
 
 # Page layout and styles
-st.set_page_config(layout="wide", page_title="Policymakers AI Main Page",)
+st.set_page_config(layout="wide", page_title="Policymakers AI Main Page",initial_sidebar_state="collapsed")
 event_details_style()
 
 query_params = st.query_params

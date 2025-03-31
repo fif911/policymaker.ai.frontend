@@ -10,7 +10,7 @@ query_params = st.query_params
 period = query_params.get("period", None)
 
 if period:
-    st.set_page_config(layout="wide", page_title=f"Policymakers AI: All events for {period} horizon", )
+    st.set_page_config(layout="wide", page_title=f"Policymakers AI: All events for {period} horizon", initial_sidebar_state="collapsed")
 
     # Back button
     st.markdown(
