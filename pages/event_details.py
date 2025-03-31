@@ -1,7 +1,8 @@
 import streamlit as st
+
+from utils.mongo import get_mongo_connection
 from utils.pages_styles import go_back_button_style
 from bson import ObjectId
-from app import collection
 from utils.pages_utils import decode_base64
 
 # Page layout and styles
@@ -25,7 +26,7 @@ if event_id:
         f"Go to view all for {period} horizon"
         f'</a>', unsafe_allow_html=True)
 
-    event = collection.find_one({"_id": ObjectId(event_id)})
+    event = get_mongo_connection().find_one({"_id": ObjectId(event_id)})
 
     event["research"] = decode_base64(event["research"])
 

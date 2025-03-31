@@ -3,6 +3,8 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 import streamlit as st
 
+from utils.mongo import get_mongo_connection
+
 
 def add_sidebar(st):
     # Use a default file if no custom file is uploaded
@@ -30,12 +32,8 @@ def add_sidebar(st):
 
 @st.cache_data
 def load_data():
-    assert (MONGODB_URI := st.secrets["MONGODB_URI"]), "No MongoDB URI provided in secrets.toml."
-
-    client: MongoClient = MongoClient(MONGODB_URI)
-    db: Database = client.get_database("events")
-    collection: Collection = db.get_collection("events")
-    data = collection.find().to_list()
+    """Load data from MongoDB"""
+    data = get_mongo_connection().find().to_list()
     return data
 
 
