@@ -196,3 +196,82 @@ def go_back_button_style():
          }
          </style>
          """, unsafe_allow_html=True)
+
+def event_details_style():
+    st.markdown("""
+        <style>
+        .event-details {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .event-header {
+            margin-bottom: 24px;
+        }
+        
+        .event-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+        
+        .event-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        
+        .meta-chip {
+            background: #f5f5f5;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .date-chip { background: #e3f2fd; color: #1976d2; }
+        .country-chip { background: #e8f5e9; color: #2e7d32; }
+        .category-chip { background: #fff3e0; color: #f57c00; }
+        .likelihood-chip { background: #fce4ec; color: #c2185b; }
+        
+        .event-content {
+            color: #333;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        
+        .event-content h1 { font-size: 24px; margin: 24px 0 16px; }
+        .event-content h2 { font-size: 20px; margin: 20px 0 12px; }
+        .event-content h3 { font-size: 18px; margin: 16px 0 8px; }
+        .event-content p { margin-bottom: 16px; }
+        .event-content ul, .event-content ol { margin: 16px 0; padding-left: 24px; }
+        .event-content li { margin-bottom: 8px; }
+        .event-content a { color: #1976d2; text-decoration: none; }
+        .event-content a:hover { text-decoration: underline; }
+        .event-content blockquote {
+            border-left: 4px solid #e0e0e0;
+            margin: 16px 0;
+            padding-left: 16px;
+            color: #666;
+        }
+        .event-content code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .event-content pre {
+            background: #f5f5f5;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+        </style>
+    """, unsafe_allow_html=True)
