@@ -239,7 +239,7 @@ def event_details_style():
         .meta-chip:hover::after {
             content: attr(data-tooltip);
             position: absolute;
-            bottom: 100%;
+            top: 100%;
             left: 50%;
             transform: translateX(-50%);
             padding: 8px 12px;
@@ -249,18 +249,18 @@ def event_details_style():
             font-size: 12px;
             white-space: nowrap;
             z-index: 1000;
-            margin-bottom: 8px;
+            margin-top: 8px;
         }
         
         .meta-chip:hover::before {
             content: '';
             position: absolute;
-            bottom: 100%;
+            top: 100%;
             left: 50%;
             transform: translateX(-50%);
             border: 6px solid transparent;
-            border-top-color: rgba(0, 0, 0, 0.8);
-            margin-bottom: 2px;
+            border-bottom-color: rgba(0, 0, 0, 0.8);
+            margin-top: -4px;
         }
         
         .date-chip { background: #e3f2fd; color: #1976d2; }
