@@ -14,11 +14,11 @@ st.set_page_config(
 )
 blocks_style()
 
+# TODO: Where to put button to check the graph out?
+
 loaded_data = load_data()
 
-# st.write(loaded_data)
-
-df = pd.DataFrame(loaded_data) # TODO: Cache in some way
+df = pd.DataFrame(loaded_data)
 
 df["likelihood"] = choices(range(1, 10), k=len(df)) # TODO: Wait for Yehor to change in mongo
 

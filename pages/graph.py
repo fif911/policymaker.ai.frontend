@@ -33,6 +33,15 @@ def main():
     st.markdown("""
     AI monitoring tool for real time geopolitical analysis.
     """)
+
+    st.markdown(
+        f'<div style="margin-bottom: 24px;">'
+        f'  <a href="/" target="_self" style="color: white; background-color: #333; padding: 8px 16px; border-radius: 16px; text-decoration: none; margin-right: 12px;">'
+        f"Back to main page"
+        f'  </a>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
     
     # Create columns for stats and filters later
     col1, col2 = st.columns([3, 1])

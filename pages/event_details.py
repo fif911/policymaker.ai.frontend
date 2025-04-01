@@ -22,7 +22,7 @@ if event_id:
     st.markdown(
         f'<div style="margin-bottom: 24px;">'
         f'  <a href="/" target="_self" style="color: white; background-color: #333; padding: 8px 16px; border-radius: 16px; text-decoration: none; margin-right: 12px;">'
-        f"Go to main page"
+        f"Back to main page"
         f'  </a>'
         f'  <a href="potential_events_horizon?period={period}" target="_self" style="color: white; background-color: #333; padding: 8px 16px; border-radius: 16px; text-decoration: none;">'
         f"Back to {period} horizon"
@@ -58,3 +58,11 @@ if event_id:
 
 else:
     st.error("You did not pass a query parameter event_id. Please make sure you pass it.")
+    st.markdown(
+        f'<div style="margin-bottom: 24px;">'
+        f'  <a href="/" target="_self" style="color: white; background-color: #333; padding: 8px 16px; border-radius: 16px; text-decoration: none; margin-right: 12px;">'
+        f"Back to main page"
+        f'  </a>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
