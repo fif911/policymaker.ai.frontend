@@ -19,7 +19,8 @@ period = query_params.get("period", None)
 go_back_button_style()
 
 # Call the function to load the CSS file
-insert_css(f"{settings.root_directory}/web/modal.css")
+css = insert_css(f"{settings.root_directory}/web/modal.css")
+st.markdown(css, unsafe_allow_html=True)
 
 st.write(color_map)
 
