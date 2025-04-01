@@ -1,6 +1,8 @@
 import streamlit as st
 import base64
 import textwrap
+import toml
+from config import settings
 
 IMAGE_SIZE = [200, 200]
 TITLE_SYMBOLS = 100
@@ -21,6 +23,25 @@ def convert_due_dates_into_dates(due_dates):
         date_in_days = int(date[0]) * dates_coded[date[1]]
         dates_scores.append(date_in_days)
     return dates_scores
+
+def add_sidebar_and_layout(file_called_from: str):
+    # Load pages.toml file
+    pages_config = toml.load(f"{settings.root_directory}/.streamlit/pages.toml")
+    pages = pages_config.get("pages", [])
+
+    current_page = next(item for item in pages if file_called_from in item["path"])
+
+    # Page layout and styles
+    st.set_page_config(
+        layout="wide",
+        page_title=current_page["name"],
+        page_icon=current_page["icon"],
+        initial_sidebar_state="collapsed"
+    )
+
+    with st.sidebar:
+        for page in pages:
+            st.page_link(page=page["path"], label=page["name"], icon=page["icon"])
 
 def add_one_event(row, period):
     st.markdown(

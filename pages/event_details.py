@@ -1,14 +1,12 @@
 import streamlit as st
 import markdown
 import re
-
 from utils.mongo import get_mongo_connection
 from utils.pages_styles import go_back_button_style, event_details_style
 from bson import ObjectId
-from utils.pages_utils import decode_base64
+from utils.pages_utils import decode_base64, add_sidebar_and_layout
 
-# Page layout and styles
-st.set_page_config(layout="wide", page_title="Policymakers AI Main Page",initial_sidebar_state="collapsed")
+pages = add_sidebar_and_layout("event_details")
 event_details_style()
 
 query_params = st.query_params

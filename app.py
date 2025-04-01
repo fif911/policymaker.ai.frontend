@@ -3,15 +3,11 @@ import pandas as pd
 from random import choices
 from utils.pages_styles import blocks_style
 from utils.frontend_utils import load_data
-from utils.pages_utils import convert_due_dates_into_dates
+from utils.pages_utils import convert_due_dates_into_dates, add_sidebar_and_layout
 from utils.pages_filters import filter_by_country_category, filter_and_display_by_time_period
 
-# Page layout and styles
-st.set_page_config(
-    layout="wide", 
-    page_title="Policymakers AI Main Page",
-    initial_sidebar_state="collapsed"
-)
+add_sidebar_and_layout("app")
+
 blocks_style()
 
 # TODO: Where to put button to check the graph out?

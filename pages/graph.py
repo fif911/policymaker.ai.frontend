@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import datetime
 from utils.graph_functions import create_graph, draw_graph
 from utils.frontend_utils import add_sidebar, filter_data
+from utils.pages_utils import add_sidebar_and_layout
 from config import settings
 
 # Set custom theme for Streamlit
@@ -13,13 +14,7 @@ def set_custom_theme():
         )
 
 def main():
-    # Set page config with custom icon and layout
-    st.set_page_config(
-        page_title="Policymakers AI",
-        page_icon="🔄",
-        layout="wide",
-        initial_sidebar_state="expanded"
-    )
+    add_sidebar_and_layout("graph")
     
     # Apply custom theme
     set_custom_theme()
