@@ -1,28 +1,15 @@
 import streamlit as st
-import base64
 import textwrap
 import toml
+import pandas as pd
+from random import choices
+from utils.pages_styles import horizon_headers_style
+from utils.frontend_utils import filter_data_by_country_category
 from config import settings
 
 IMAGE_SIZE = [200, 200]
 TITLE_SYMBOLS = 100
 REASONING_SYMBOLS = 120
-
-def decode_base64(encoded_text):
-    try:
-        return base64.b64decode(encoded_text).decode("utf-8")
-    except Exception:
-        return "[Error decoding]"
-
-def convert_due_dates_into_dates(due_dates):
-    dates_coded = {"day": 1, "days": 1, "week": 1, "weeks": 7, "month": 30, "months": 30, "year": 365, "years": 365}
-
-    dates_scores = []
-    for date in due_dates:
-        date = date.split(" ")
-        date_in_days = int(date[0]) * dates_coded[date[1]]
-        dates_scores.append(date_in_days)
-    return dates_scores
 
 def add_sidebar_and_layout(file_called_from: str):
     # Load pages.toml file
@@ -70,3 +57,43 @@ def add_one_event(row, period):
         f'</a>',
         unsafe_allow_html=True
     )
+
+def layout_for_one_horizon_page(data: pd.DataFrame, period: str):
+
+    filtered_df_by_country_category, _, _ = filter_data_by_country_category(data)
+
+    data = pd.DataFrame(filtered_df_by_country_category)
+
+    data["likelihood"] = choices(range(1, 10), k=len(data))
+
+    data.sort_values("likelihood", ascending=False, inplace=True)
+
+    horizon_headers_style(period, len(data), show_view_all=False)
+
+    # Get the number of columns based on window width
+    num_columns = 4
+
+    with st.container():
+        st.markdown('<div class="cards-container">', unsafe_allow_html=True)
+        # Initialize column counter and cycle through column positions
+        col_index = 0
+        cols = []
+
+        for i, row in enumerate(data.itertuples()):
+            # Create new row when needed
+            if i % num_columns == 0:
+                cols = st.columns(num_columns, gap="medium")
+                col_index = 0
+
+            # Use current column in the row
+            with cols[col_index]:
+                add_one_event(row, period)
+
+            # Move to next column
+            col_index = (col_index + 1) % num_columns
+
+            # Add gap between rows
+            if col_index == 0 and i != len(data) - 1:
+                st.markdown('<div style="height: 20px;"></div>', unsafe_allow_html=True)
+
+        st.markdown('</div>', unsafe_allow_html=True)

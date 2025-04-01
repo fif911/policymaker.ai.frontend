@@ -1,10 +1,11 @@
 import streamlit as st
 import markdown
 import re
+from bson import ObjectId
 from utils.mongo import get_mongo_connection
 from utils.pages_styles import go_back_button_style, event_details_style
-from bson import ObjectId
-from utils.pages_utils import decode_base64, add_sidebar_and_layout
+from utils.pages_visuals import add_sidebar_and_layout
+from utils.frontend_utils import decode_base64
 
 pages = add_sidebar_and_layout("event_details")
 event_details_style()

@@ -1,9 +1,8 @@
 import streamlit as st
 import pandas as pd
 from utils.mongo import get_mongo_connection
-from utils.pages_filters import layout_for_one_horizon_page
 from utils.pages_styles import blocks_style, go_back_button_style
-from utils.pages_utils import add_sidebar_and_layout
+from utils.pages_visuals import add_sidebar_and_layout, layout_for_one_horizon_page
 
 # Get the period from query parameters
 query_params = st.query_params
