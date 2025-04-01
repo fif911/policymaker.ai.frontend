@@ -1,0 +1,19 @@
+[[pages]]
+path = "app.py"
+name = "News Feed"
+icon = "🏠"
+
+[[pages]]
+path = "pages/graph.py"
+name = "Graph"
+icon = "📊"
+
+[[pages]]
+path = "pages/event_details.py"
+name = "Event Details"
+icon = "📝"
+
+[[pages]]
+path = "pages/potential_events_horizon.py"
+name = "Potential Events Per Horizon"
+icon = "🔮" 
