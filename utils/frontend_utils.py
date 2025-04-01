@@ -113,6 +113,11 @@ def filter_and_display_by_time_period(df: pd.DataFrame, period: str):
 
             st.markdown('</div>', unsafe_allow_html=True)
 
+def insert_css(file_name: str):
+    # Function to load and inject CSS
+    with open(file_name, "r") as f:
+        css = st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    return css
 
 def decode_base64(encoded_text):
     try:

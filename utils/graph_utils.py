@@ -1,8 +1,10 @@
 from base64 import b64decode
 import re
 import json
-from web.modal_js import modal_js_template
 import os
+from web.modal_js import modal_js_template
+from utils.frontend_utils import insert_css
+from config import settings
 
 def add_graph_sidebar(st):
     st.markdown("### Visualization Options")
@@ -130,9 +132,8 @@ def get_final_html(network, graph, color_map, legend_data, node_info, file_path=
                         legend_json = legend_json.replace('\\', '\\\\').replace("'", "\\'")
 
                         # The modal and legend - improved styling, layout, UX
-                        with open("web/modal.css", "r") as file:
-                            modal_css: str = f"<style>{file.read()}</style>"
-                        with open("web/modal.html", "r") as file:
+                        modal_css: str = insert_css(f"{settings.root_directory}/web/modal.css")
+                        with open(f"{settings.root_directory}/web/modal.html", "r") as file:
                             modal_html: str = file.read()
                         modal_js: str = modal_js_template.format(node_data_json=node_data_json, legend_json=legend_json)
 
