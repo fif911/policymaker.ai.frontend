@@ -1,15 +1,12 @@
 import streamlit as st
-import textwrap
 import toml
 import pandas as pd
 from random import choices
 from utils.pages_styles import horizon_headers_style
-from utils.frontend_utils import filter_data_by_country_category
+from utils.frontend_utils import filter_data_by_country_category, add_one_event
 from config import settings
 
 IMAGE_SIZE = [200, 200]
-TITLE_SYMBOLS = 100
-REASONING_SYMBOLS = 120
 
 def add_sidebar_and_layout(file_called_from: str):
     # Load pages.toml file
@@ -29,34 +26,6 @@ def add_sidebar_and_layout(file_called_from: str):
     with st.sidebar:
         for page in pages:
             st.page_link(page=page["path"], label=page["name"], icon=page["icon"])
-
-def add_one_event(row, period):
-
-    # TODO: Add support for checking the theme whenever streamlit update for it rolls out (track github issue)
-    # will have to modify color of <h3 class="event-title">
-
-    st.markdown(
-        f'<a href="event_details?event_id={row._1}&period={period}" target="_self" style="color: inherit; text-decoration: none;">'
-        f'  <div class="event-card">'
-        f'      <div class="card-image">'
-        f'          <img src="https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=" '
-        f'               alt="Event thumbnail">'
-        f'      </div>'
-        f'      <div class="card-content">'
-        f'          <div>'
-        f'              <h3 class="event-title">{textwrap.shorten(row.potential_event, width=TITLE_SYMBOLS, placeholder="...")}</h3>'
-        f'              <p class="event-reasoning">{textwrap.shorten(row.reasoning, width=REASONING_SYMBOLS, placeholder="...")}</p>'
-        f'          </div>'
-        f'          <div class="event-meta">'
-        f'              <span class="meta-chip likelihood-chip">Likelihood: {row.likelihood}</span>'
-        f'              <span class="meta-chip category-chip">{row.category}</span>'
-        f'              <span class="meta-chip country-chip">{row.research_country}</span>'
-        f'          </div>'
-        f'      </div>'
-        f'  </div>'
-        f'</a>',
-        unsafe_allow_html=True
-    )
 
 def layout_for_one_horizon_page(data: pd.DataFrame, period: str):
 

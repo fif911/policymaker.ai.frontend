@@ -7,7 +7,6 @@ from pyvis.network import Network
 from utils.graph_utils import options_setting, create_graph_structure_and_legend, get_final_html
 from utils.frontend_utils import whitespaces_to_line_breaks
 
-
 def create_graph(data, show_percentages=True):
     graph = nx.DiGraph()  # Directed graph to show the flow of causation
 

@@ -1,17 +1,49 @@
 from string import whitespace
-
+import textwrap
 import streamlit as st
 import pandas as pd
 import base64
 from utils.mongo import get_mongo_connection
 from utils.pages_styles import horizon_headers_style
-from utils.pages_visuals import add_one_event
+# from utils.pages_visuals import add_one_event
+
+TITLE_SYMBOLS = 100
+REASONING_SYMBOLS = 120
 
 @st.cache_data
 def load_data():
     """Load data from MongoDB"""
     data = get_mongo_connection().find().to_list()
     return data
+
+def add_one_event(row, period):
+
+    # TODO: Add support for checking the theme whenever streamlit update for it rolls out (track github issue)
+    # will have to modify color of <h3 class="event-title">
+
+    st.markdown(
+        f'<a href="event_details?event_id={row._1}&period={period}" target="_self" style="color: inherit; text-decoration: none;">'
+        f'  <div class="event-card">'
+        f'      <div class="card-image">'
+        f'          <img src="https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=" '
+        f'               alt="Event thumbnail">'
+        f'      </div>'
+        f'      <div class="card-content">'
+        f'          <div>'
+        f'              <h3 class="event-title">{textwrap.shorten(row.potential_event, width=TITLE_SYMBOLS, placeholder="...")}</h3>'
+        f'              <p class="event-reasoning">{textwrap.shorten(row.reasoning, width=REASONING_SYMBOLS, placeholder="...")}</p>'
+        f'          </div>'
+        f'          <div class="event-meta">'
+        f'              <span class="meta-chip likelihood-chip">Likelihood: {row.likelihood}</span>'
+        f'              <span class="meta-chip category-chip">{row.category}</span>'
+        f'              <span class="meta-chip country-chip">{row.research_country}</span>'
+        f'          </div>'
+        f'      </div>'
+        f'  </div>'
+        f'</a>',
+        unsafe_allow_html=True
+    )
+
 
 def filter_data_by_country_category(data: pd.DataFrame | None = None):
     # Add date filter

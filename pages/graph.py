@@ -46,7 +46,7 @@ def main():
     with st.sidebar:
         show_percentages = add_graph_sidebar(st)
 
-    filtered_data, selected_countries, selected_categories = filter_data_by_country_category(st)
+    filtered_data, selected_countries, selected_categories = filter_data_by_country_category()
 
     # Main area
     if filtered_data:
