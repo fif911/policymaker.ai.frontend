@@ -9,8 +9,9 @@ from utils.graph_utils import whitespaces_to_line_breaks, options_setting, creat
 def create_graph(data, show_percentages=True):
     graph = nx.DiGraph()  # Directed graph to show the flow of causation
 
+    # TODO: find a better way to get the country for node Now. Also will be a problem when there are many countries.
     # Add root node for "Now"
-    research_country = data[0]["research_country"]  # TODO: find a better way to get the country
+    research_country = data[0]["research_country"]
     graph.add_node(
         0,
         title="Now",
@@ -19,7 +20,8 @@ def create_graph(data, show_percentages=True):
         country=research_country,
         category="Now",
         research="Now",
-        research_date="Now"
+        due_date="Now",
+        research_date = "Now",
     )
 
     # Add nodes
@@ -38,7 +40,8 @@ def create_graph(data, show_percentages=True):
             country=node["research_country"],  # TODO: country vs research_country
             category=node["category"],
             research=node["research"],
-            research_date=node["research_date"] # TODO: this must be DUE DATE
+            due_date=node["due_date"],
+            research_date=node["research_date"],
         )
 
         research = b64decode(node["research"].encode()).decode()
@@ -52,13 +55,12 @@ def create_graph(data, show_percentages=True):
             edge_label = f"{likelihood:.0f}%"
         else:
             edge_label = ""
-        edge_length = likelihood  # TODO: reformulate to work on date
+
         graph.add_edge(
             0,
             node_id,
             title=edge_label,
             label=edge_label,
-            length=edge_length,
             width=2
         )
 

@@ -1,7 +1,7 @@
 import streamlit as st
 from datetime import datetime
 from utils.graph_functions import create_graph, draw_graph
-from utils.frontend_utils import add_sidebar, filter_data
+from utils.frontend_utils import add_graph_sidebar, filter_data
 from utils.pages_utils import add_sidebar_and_layout
 from config import settings
 
@@ -43,7 +43,7 @@ def main():
     
     # Sidebar with improved organization
     with st.sidebar:
-        show_percentages = add_sidebar(st)
+        show_percentages = add_graph_sidebar(st)
 
     filtered_data, selected_countries, selected_categories = filter_data(st)
 

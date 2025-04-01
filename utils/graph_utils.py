@@ -81,7 +81,7 @@ def create_graph_structure_and_legend(data, color_map, categories):
 
         node_info[node_id] = {
             "research_country": item["research_country"],
-            "research_date": item["research_date"],
+            "due_date": item["due_date"],
             "potential_event": item["potential_event"],
             "category": item["category"],
             "research": content,

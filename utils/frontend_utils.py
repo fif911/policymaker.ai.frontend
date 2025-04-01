@@ -3,7 +3,7 @@ import streamlit as st
 from utils.mongo import get_mongo_connection
 
 
-def add_sidebar(st):
+def add_graph_sidebar(st):
     # Use a default file if no custom file is uploaded
 
     st.markdown("### Visualization Options")

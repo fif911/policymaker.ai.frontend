@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {{
                         
                         if (data) {{
                             modalTitle.textContent = data.potential_event;
-                            modalDate.textContent = data.research_date;
+                            modalDate.textContent = data.due_date;
                             modalCountry.textContent = data.research_country;
                             
                             // Set color for category based on legend
