@@ -166,6 +166,10 @@ def blocks_style():
     """, unsafe_allow_html=True)
 
 def horizon_headers_style(period: str, data_length: int, show_view_all: bool = True):
+
+    # TODO: Add support for checking the theme whenever streamlit update for it rolls out (track github issue)
+    # will need to change color in .horizon-header h2
+
     st.markdown("""
         <style>
         .horizon-header {

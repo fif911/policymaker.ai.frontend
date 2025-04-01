@@ -44,6 +44,10 @@ def add_sidebar_and_layout(file_called_from: str):
             st.page_link(page=page["path"], label=page["name"], icon=page["icon"])
 
 def add_one_event(row, period):
+
+    # TODO: Add support for checking the theme whenever streamlit update for it rolls out (track github issue)
+    # will have to modify color of <h3 class="event-title">
+
     st.markdown(
         f'<a href="event_details?event_id={row._1}&period={period}" target="_self" style="color: inherit; text-decoration: none;">'
         f'  <div class="event-card">'
