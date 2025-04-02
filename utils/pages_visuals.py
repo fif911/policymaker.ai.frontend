@@ -156,17 +156,21 @@ def add_one_event(row, period):
 
 def show_full_event(event, period):
     # Render the event details with proper styling and tooltips
+
+    if " - " in event["research"]:
+        event["research"] = event["research"].replace("- ", "   - ")
     st.markdown(
         f"""
-            <div class="custom-container">
-                <div class="go-back-button">
-                      <a href="/" target="_self">
+        <div class="outer-container">
+            <div class="go-back-button">
+                    <a href="/" target="_self">
                         Back to main page
                     </a>
                     <a href="potential_events_horizon?period={period}" target="_self">
                         Back to {period} horizon
                     </a>
-                </div>
+            </div>
+            <div class="custom-container">
               <div class="event-header">
                 <h1 class="event-title">{event["potential_event"]}</h1>
                 <div class="event-meta">
@@ -180,6 +184,7 @@ def show_full_event(event, period):
                 {markdown.markdown(event["research"])}
               </div>
             </div>
-            """,
+        </div>
+        """,
         unsafe_allow_html=True,
     )

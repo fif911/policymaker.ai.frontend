@@ -4,7 +4,7 @@
     padding: 8px 16px;
     border-radius: 16px;
     text-decoration: none;
-    margin-right: 12px;
+    margin-right: 10px;
 }
 
 .view-all-button{
@@ -19,6 +19,7 @@
             text-decoration: none;
             transition: all 0.2s ease-in-out;
         }
+
 .view-all-button:hover {
     background: #bbdefb;
     transform: translateY(-1px);

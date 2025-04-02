@@ -1,9 +1,12 @@
-.custom-container {
+.outer-container {
     max-width: 800px;
     margin: auto; /* Center the block horizontally */
+}
+.custom-container {
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
+    margin-top: 20px;
     /* background-color: #f9f9f9; */
 }
 
@@ -19,7 +22,7 @@
 }
 
 .event-title {
-    font-size: 32px;
+    font-size: 30px !important;
     font-weight: 600;
     color: #1a1a1a;
     margin-bottom: 16px;
