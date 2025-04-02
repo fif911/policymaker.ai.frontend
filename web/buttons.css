@@ -1,0 +1,25 @@
+.go-back-button > a {
+    color: white;
+    background-color: #333;
+    padding: 8px 16px;
+    border-radius: 16px;
+    text-decoration: none;
+    margin-right: 12px;
+}
+
+.view-all-button{
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+        }
+.view-all-button:hover {
+    background: #bbdefb;
+    transform: translateY(-1px);
+}

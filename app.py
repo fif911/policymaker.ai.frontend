@@ -1,14 +1,10 @@
 import streamlit as st
 import pandas as pd
-from random import choices
-from utils.pages_styles import blocks_style
-from utils.frontend_utils import filter_data_by_country_category, filter_and_display_by_time_period, convert_due_dates_into_dates
-from utils.pages_visuals import add_sidebar_and_layout
-
+from utils.frontend_utils import filter_data_by_country_category, convert_due_dates_into_dates
+from utils.pages_visuals import add_sidebar_and_layout, filter_and_display_by_time_period
+from utils.frontend_utils import insert_css
 
 add_sidebar_and_layout("app")
-
-blocks_style()
 
 # TODO: Where to put button to check the graph out?
 
@@ -23,12 +19,7 @@ colors = ["#4285F4", "#EA4335", "#FBBC05", "#34A853", "#FF6D01", "#46BDC6", "#7B
 for i, category in enumerate(categories):
     color_map[category] = colors[i % len(colors)]
 
-df["likelihood"] = choices(range(1, 10), k=len(df)) # TODO: Wait for Yehor to change in mongo
-
-df["due_date_score"] = convert_due_dates_into_dates(df["due_date"])
-
 df.sort_values("due_date_score", ascending=True, inplace=True)
 
 for period in df["due_date"].unique():
-
     filter_and_display_by_time_period(df, period)

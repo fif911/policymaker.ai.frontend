@@ -3,6 +3,7 @@ import networkx as nx
 import datetime
 from base64 import b64decode
 import re
+import streamlit as st
 from pyvis.network import Network
 from utils.graph_utils import options_setting, create_graph_structure_and_legend, get_final_html
 from utils.frontend_utils import whitespaces_to_line_breaks
@@ -110,6 +111,9 @@ def draw_graph(graph, data):
 
         research = b64decode(graph.nodes[node_id]['research'].encode()).decode()
         research_date = graph.nodes[node_id]['research_date']
+        due_date = graph.nodes[node_id]['due_date']
+
+
         try:
             due_date = (
                     re
@@ -117,9 +121,13 @@ def draw_graph(graph, data):
                     .group(2)
                 )
         except:
-            print(research)
-        due_date = datetime.datetime.strptime(due_date, "%Y-%m-%d")
-        research_date = datetime.datetime.strptime(research_date, "%Y-%m-%d")
+            st.write("Due date failed")
+
+        if isinstance(due_date, str):
+            due_date = datetime.datetime.strptime(due_date, "%Y-%m-%d")
+
+        if isinstance(research_date, str):
+            research_date = datetime.datetime.strptime(research_date, "%Y-%m-%d")
 
         days = (due_date - research_date).days
 

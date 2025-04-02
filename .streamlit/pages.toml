@@ -1,6 +1,6 @@
 [[pages]]
 path = "app.py"
-name = "All Events Feed"
+name = "Feed"
 icon = "🏠"
 
 [[pages]]
