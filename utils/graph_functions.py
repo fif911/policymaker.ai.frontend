@@ -109,10 +109,9 @@ def draw_graph(graph, data):
             node['y'] = 0
             continue
 
-        research = b64decode(graph.nodes[node_id]['research'].encode()).decode()
+        research = b64decode(graph.nodes[node_id]['research'].encode()).decode() # TODO: Can carefully change to use from utils.frontend_utils import decode_base64
         research_date = graph.nodes[node_id]['research_date']
         due_date = graph.nodes[node_id]['due_date']
-
 
         try:
             due_date = (
@@ -121,7 +120,7 @@ def draw_graph(graph, data):
                     .group(2)
                 )
         except:
-            st.write("Due date failed")
+            st.write("There are failed due dates in this data.")
 
         if isinstance(due_date, str):
             due_date = datetime.datetime.strptime(due_date, "%Y-%m-%d")
