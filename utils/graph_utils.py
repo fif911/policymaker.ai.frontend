@@ -1,19 +1,31 @@
-from string import whitespace
 from base64 import b64decode
 import re
 import json
-from web.modal_js import modal_js_template
 import os
+from web.modal_js import modal_js_template
+from utils.frontend_utils import insert_css
+from config import settings
 
-def whitespaces_to_line_breaks(string: str, each_num: int = 5) -> str:
-    indexes = [i for i, char in enumerate(string) if char in whitespace]
+def add_graph_sidebar(st):
+    st.markdown("### Visualization Options")
 
-    indexes = indexes[each_num-1::each_num]
+    # Graph options with better organization
+    show_percentages = st.checkbox(
+        "Show likelihood percentages on connections",
+        value=True,
+        help="Display the probability percentage on each causal relationship"
+    )
 
-    for index in indexes:
-        string = string[:index] + "\n" + string[index + 1:]
+    # Add info section at the bottom of sidebar
+    st.markdown("---")
+    st.markdown("""
+          **💡 Tips:**
+          - Click on any node to view details
+          - Hover over connections to see causation likelihood
+          - Use mouse wheel to zoom in/out
+          """)
 
-    return string
+    return show_percentages
 
 def options_setting(network):
     # Set options
@@ -64,7 +76,7 @@ def create_graph_structure_and_legend(data, color_map, categories):
     node_info = {}
     for item in data:
         node_id = str(item["_id"])
-        content = b64decode(item["research"].encode()).decode()
+        content = b64decode(item["research"].encode()).decode() # TODO: Can carefully change to use from utils.frontend_utils import decode_base64
         content = re.sub(r'<think>.*?</think>\s*', '', content, flags=re.DOTALL)
 
         content = re.sub(r'\s*?\n', '<br>', content)
@@ -81,7 +93,7 @@ def create_graph_structure_and_legend(data, color_map, categories):
 
         node_info[node_id] = {
             "research_country": item["research_country"],
-            "research_date": item["research_date"],
+            "due_date": item["due_date"],
             "potential_event": item["potential_event"],
             "category": item["category"],
             "research": content,
@@ -120,9 +132,8 @@ def get_final_html(network, graph, color_map, legend_data, node_info, file_path=
                         legend_json = legend_json.replace('\\', '\\\\').replace("'", "\\'")
 
                         # The modal and legend - improved styling, layout, UX
-                        with open("web/modal.css", "r") as file:
-                            modal_css: str = f"<style>{file.read()}</style>"
-                        with open("web/modal.html", "r") as file:
+                        modal_css: str = insert_css(f"{settings.root_directory}/web/modal.css")
+                        with open(f"{settings.root_directory}/web/modal.html", "r") as file:
                             modal_html: str = file.read()
                         modal_js: str = modal_js_template.format(node_data_json=node_data_json, legend_json=legend_json)
 

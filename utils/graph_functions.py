@@ -3,14 +3,17 @@ import networkx as nx
 import datetime
 from base64 import b64decode
 import re
+import streamlit as st
 from pyvis.network import Network
-from utils.graph_utils import whitespaces_to_line_breaks, options_setting, create_graph_structure_and_legend, get_final_html
+from utils.graph_utils import options_setting, create_graph_structure_and_legend, get_final_html
+from utils.frontend_utils import whitespaces_to_line_breaks
 
 def create_graph(data, show_percentages=True):
     graph = nx.DiGraph()  # Directed graph to show the flow of causation
 
+    # TODO: find a better way to get the country for node Now. Also will be a problem when there are many countries.
     # Add root node for "Now"
-    research_country = data[0]["research_country"]  # TODO: find a better way to get the country
+    research_country = data[0]["research_country"]
     graph.add_node(
         0,
         title="Now",
@@ -19,7 +22,8 @@ def create_graph(data, show_percentages=True):
         country=research_country,
         category="Now",
         research="Now",
-        research_date="Now"
+        due_date="Now",
+        research_date = "Now",
     )
 
     # Add nodes
@@ -38,7 +42,8 @@ def create_graph(data, show_percentages=True):
             country=node["research_country"],  # TODO: country vs research_country
             category=node["category"],
             research=node["research"],
-            research_date=node["research_date"] # TODO: this must be DUE DATE
+            due_date=node["due_date"],
+            research_date=node["research_date"],
         )
 
         research = b64decode(node["research"].encode()).decode()
@@ -52,13 +57,12 @@ def create_graph(data, show_percentages=True):
             edge_label = f"{likelihood:.0f}%"
         else:
             edge_label = ""
-        edge_length = likelihood  # TODO: reformulate to work on date
+
         graph.add_edge(
             0,
             node_id,
             title=edge_label,
             label=edge_label,
-            length=edge_length,
             width=2
         )
 
@@ -107,6 +111,9 @@ def draw_graph(graph, data):
 
         research = b64decode(graph.nodes[node_id]['research'].encode()).decode()
         research_date = graph.nodes[node_id]['research_date']
+        due_date = graph.nodes[node_id]['due_date']
+
+
         try:
             due_date = (
                     re
@@ -114,9 +121,13 @@ def draw_graph(graph, data):
                     .group(2)
                 )
         except:
-            print(research)
-        due_date = datetime.datetime.strptime(due_date, "%Y-%m-%d")
-        research_date = datetime.datetime.strptime(research_date, "%Y-%m-%d")
+            st.write("Due date failed")
+
+        if isinstance(due_date, str):
+            due_date = datetime.datetime.strptime(due_date, "%Y-%m-%d")
+
+        if isinstance(research_date, str):
+            research_date = datetime.datetime.strptime(research_date, "%Y-%m-%d")
 
         days = (due_date - research_date).days
 

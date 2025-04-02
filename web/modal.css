@@ -7,9 +7,8 @@ body {
 }
 
 /* Modal styling */
-#node-modal {
-    display: none;
-    position: fixed;
+/* node-modal is for graph, page-modal is for event details page */
+#node-modal, #page-modal {
     z-index: 1000;
     left: 0;
     top: 0;
@@ -18,6 +17,17 @@ body {
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(3px);
     transition: opacity 0.3s ease;
+}
+
+#node-modal
+{
+    display: none;
+    position: fixed;
+}
+
+#page-modal {
+    display: inline;
+    position: relative;
 }
 
 .modal-content {

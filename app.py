@@ -1,33 +1,27 @@
 import streamlit as st
 import pandas as pd
-from random import choices
-from utils.pages_styles import blocks_style
-from utils.frontend_utils import load_data
-from utils.pages_utils import convert_due_dates_into_dates
-from utils.pages_filters import filter_by_country_category, filter_and_display_by_time_period
+from utils.frontend_utils import filter_data_by_country_category, convert_due_dates_into_dates
+from utils.pages_visuals import add_sidebar_and_layout, filter_and_display_by_time_period
 
-# Page layout and styles
-st.set_page_config(
-    layout="wide", 
-    page_title="Policymakers AI Main Page",
-    initial_sidebar_state="collapsed"
-)
-blocks_style()
+add_sidebar_and_layout("app")
 
-loaded_data = load_data()
+# TODO: Where to put button to check the graph out?
 
-# st.write(loaded_data)
+filtered_df_by_country_category, _, _ = filter_data_by_country_category()
 
-df = pd.DataFrame(loaded_data) # TODO: Cache in some way
+df = pd.DataFrame(filtered_df_by_country_category)
 
-df["likelihood"] = choices(range(1, 10), k=len(df)) # TODO: Wait for Yehor to change in mongo
+# categories = df['category'].unique()
+# color_map = {}
+# colors = ["#4285F4", "#EA4335", "#FBBC05", "#34A853", "#FF6D01", "#46BDC6", "#7B1FA2", "#C2185B",
+#           "#1A73E8", "#D93025", "#F9AB00", "#1E8E3E", "#E37400", "#00ACC1", "#6A1B9A", "#B00020"]
+# for i, category in enumerate(categories):
+#     color_map[category] = colors[i % len(colors)]
 
-df["due_date_score"] = convert_due_dates_into_dates(df["due_date"])
+if any(not isinstance(num, int) for num in df['likelihood']):
+    df['likelihood'] = df['likelihood'].to_numeric()
 
 df.sort_values("due_date_score", ascending=True, inplace=True)
 
-filtered_df_by_country_category = filter_by_country_category(df)
-
-for period in filtered_df_by_country_category["due_date"].unique():
-
-    filter_and_display_by_time_period(filtered_df_by_country_category, period)
+for period in df["due_date"].unique():
+    filter_and_display_by_time_period(df, period)

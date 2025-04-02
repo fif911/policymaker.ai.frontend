@@ -1,7 +1,9 @@
 import streamlit as st
 from datetime import datetime
+from utils.graph_utils import add_graph_sidebar
 from utils.graph_functions import create_graph, draw_graph
-from utils.frontend_utils import add_sidebar, filter_data
+from utils.frontend_utils import filter_data_by_country_category
+from utils.pages_visuals import add_sidebar_and_layout
 from config import settings
 
 # Set custom theme for Streamlit
@@ -13,13 +15,7 @@ def set_custom_theme():
         )
 
 def main():
-    # Set page config with custom icon and layout
-    st.set_page_config(
-        page_title="Policymakers AI",
-        page_icon="🔄",
-        layout="wide",
-        initial_sidebar_state="expanded"
-    )
+    add_sidebar_and_layout("graph")
     
     # Apply custom theme
     set_custom_theme()
@@ -33,15 +29,24 @@ def main():
     st.markdown("""
     AI monitoring tool for real time geopolitical analysis.
     """)
+
+    st.markdown(
+        f'<div style="margin-bottom: 24px;">'
+        f'  <a href="/" target="_self" style="color: white; background-color: #333; padding: 8px 16px; border-radius: 16px; text-decoration: none; margin-right: 12px;">'
+        f"Back to main page"
+        f'  </a>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
     
     # Create columns for stats and filters later
     col1, col2 = st.columns([3, 1])
     
     # Sidebar with improved organization
     with st.sidebar:
-        show_percentages = add_sidebar(st)
+        show_percentages = add_graph_sidebar(st)
 
-    filtered_data, selected_countries, selected_categories = filter_data(st)
+    filtered_data, selected_countries, selected_categories = filter_data_by_country_category()
 
     # Main area
     if filtered_data:
