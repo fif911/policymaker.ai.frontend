@@ -6,6 +6,7 @@ from utils.frontend_utils import decode_base64
 from utils.pages_visuals import add_sidebar_and_layout
 from utils.frontend_utils import insert_css
 from utils.pages_visuals import show_full_event
+from config import settings
 
 # Page layout and styles
 add_sidebar_and_layout("event_details")
@@ -15,14 +16,14 @@ event_id = query_params.get("event_id", None)
 row = query_params.get("row", None)
 period = query_params.get("period", None)
 
-button_css = insert_css("web/buttons.css")
+button_css = insert_css(f"{settings.root_directory}/web/buttons.css")
 st.markdown(button_css, unsafe_allow_html=True)
 
 if event_id:
     event = get_mongo_connection().find_one({"_id": ObjectId(event_id)})
     event["research"] = decode_base64(event["research"])
 
-    event_details_style_css = insert_css("web/event_details.css")
+    event_details_style_css = insert_css(f"{settings.root_directory}/web/event_details.css")
     st.markdown(event_details_style_css, unsafe_allow_html=True)
 
     # Remove content between <think> tags

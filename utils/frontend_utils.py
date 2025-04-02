@@ -61,7 +61,6 @@ def filter_data_by_country_category(data: pd.DataFrame | None = None):
 
     return filtered_data, selected_countries, selected_categories
 
-
 def insert_css(file_name: str):
     # Function to load and inject CSS
     with open(file_name, "r") as f:

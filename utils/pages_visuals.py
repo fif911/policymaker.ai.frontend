@@ -39,6 +39,9 @@ def layout_for_one_horizon_page(data: pd.DataFrame, period: str):
 
     data = pd.DataFrame(filtered_df_by_country_category)
 
+    if any(not isinstance(num, int) for num in data['likelihood']):
+        data['likelihood'] = data['likelihood'].to_numeric()
+
     data.sort_values("likelihood", ascending=False, inplace=True)
 
     horizon_headers(period, len(data), show_view_all=False)
@@ -97,12 +100,12 @@ def filter_and_display_by_time_period(df: pd.DataFrame, period: str):
 
 def horizon_headers(period: str, data_length: int, show_view_all: bool = True):
 
-    button_css = insert_css('web/buttons.css')
+    button_css = insert_css(f"{settings.root_directory}/web/buttons.css")
     st.markdown(button_css, unsafe_allow_html=True)
 
     # TODO: Add support for checking the theme whenever streamlit update for it rolls out (track github issue)
     # will need to change color in .horizon-header h2
-    horizon_headers_css = insert_css('web/horizon_headers.css')
+    horizon_headers_css = insert_css(f"{settings.root_directory}/web/horizon_headers.css")
     st.markdown(horizon_headers_css, unsafe_allow_html=True)
 
     view_all_button = f'<a href="potential_events_horizon?period={period}" class="view-all-button" target="_self">View All</a>' if show_view_all else ""
@@ -125,7 +128,7 @@ def add_one_event(row, period):
     # TODO: Add support for checking the theme whenever streamlit update for it rolls out (track github issue)
     # will have to modify color of <h3 class="event-title">
 
-    css = insert_css('web/blocks.css')
+    css = insert_css(f"{settings.root_directory}/web/blocks.css")
     st.markdown(css, unsafe_allow_html=True)
 
     st.markdown(

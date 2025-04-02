@@ -3,6 +3,7 @@ import pandas as pd
 from utils.mongo import get_mongo_connection
 from utils.pages_visuals import add_sidebar_and_layout, layout_for_one_horizon_page
 from utils.frontend_utils import insert_css
+from config import settings
 
 # Get the period from query parameters
 query_params = st.query_params
@@ -10,7 +11,7 @@ period = query_params.get("period", None)
 
 add_sidebar_and_layout("potential_events_horizon")
 
-insert_css("web/buttons.css")
+insert_css(f"{settings.root_directory}/web/buttons.css")
 
 # Back button
 st.markdown(
@@ -23,7 +24,6 @@ st.markdown(
 )
 
 if period:
-
     events_for_period = get_mongo_connection().find({"due_date": period})
     data_for_period = pd.DataFrame(events_for_period.to_list())
 

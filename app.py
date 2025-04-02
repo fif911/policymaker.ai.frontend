@@ -19,6 +19,9 @@ colors = ["#4285F4", "#EA4335", "#FBBC05", "#34A853", "#FF6D01", "#46BDC6", "#7B
 for i, category in enumerate(categories):
     color_map[category] = colors[i % len(colors)]
 
+if any(not isinstance(num, int) for num in df['likelihood']):
+    df['likelihood'] = df['likelihood'].to_numeric()
+
 df.sort_values("due_date_score", ascending=True, inplace=True)
 
 for period in df["due_date"].unique():
